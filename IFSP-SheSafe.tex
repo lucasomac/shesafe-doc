@@ -34,6 +34,8 @@
 \usepackage{booktabs}           % \toprule, \midrule e \bottomrule para tabelas
 % Sistema autor-data com títulos nas referências em negrito
 \usepackage[alf,abnt-emphasize=bf]{abntex2cite}	
+\usepackage{pdfpages}
+
 
 
 % ---
@@ -241,17 +243,17 @@ Violence against women is a global public health problem of epidemic proportions
 %% ----------------------------------------------------------
 %% Anexos
 %% ----------------------------------------------------------
-%\begin{anexosenv}
-%
-%% Imprime uma página indicando o início dos anexos
-%\partanexos
-%
-%\chapter{Primeiro Anexo}
-%\lipsum[30]
-%
+\begin{anexosenv}
+
+% Imprime uma página indicando o início dos anexos
+\partanexos
+
+\chapter{Avaliações Heurística da Interface }
+\includepdf[pages=-]{anexos/AnexoA.pdf}
+
 %\chapter{Segundo Anexo}
 %\lipsum[31]
-%
-%\end{anexosenv}
+
+\end{anexosenv}
 
 \end{document}
