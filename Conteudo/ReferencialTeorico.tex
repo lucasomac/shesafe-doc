@@ -66,22 +66,45 @@ O ambiente incorpora um conjunto robusto de ferramentas e frameworks para implem
 \section{Firebase}
 \subsection{Caracterização e Contextualização Histórica}
 
-O Firebase constitui-se como uma plataforma abrangente de desenvolvimento para aplicações móveis e web, tendo sido incorporada ao portfólio de soluções da Google Inc. em outubro de 2014 através de processo de aquisição estratégica \cite{google2014firebase}. Originalmente fundada em 2011 por James Tamplin e Andrew Lee, a plataforma Firebase foi concebida com o propósito de fornecer uma infraestrutura de backend-as-a-service (BaaS) completa e de alta usabilidade, direcionada especificamente para simplificar o processo de desenvolvimento e implementação de aplicações digitais \cite{tamplin2021firebase}.
+O Firebase é uma plataforma de desenvolvimento de aplicações móveis e web que integra diversos serviços em nuvem, operando sob o modelo de Backend-as-a-Service (BaaS). Fundado em 2011 por James Tamplin e Andrew Lee, o Firebase foi inicialmente concebido como uma solução para sincronização de dados em tempo real, evoluindo rapidamente para atender a demandas mais amplas do desenvolvimento moderno1\cite{firebase2025cloudnext}.
 
-A filosofia de desenvolvimento da plataforma fundamenta-se na disponibilização de um ecossistema integrado de serviços diversos, que abrangem desde funcionalidades básicas de armazenamento de dados até recursos avançados de análise comportamental e engajamento de usuários \cite{firebase2023docs}. Esta abordagem holística visa reduzir a complexidade técnica tradicionalmente associada ao desenvolvimento de backends customizados, permitindo que desenvolvedores concentrem seus esforços na criação de interfaces e experiências de usuário diferenciadas.
+Em outubro de 2014, a Google adquiriu o Firebase, incorporando-o ao seu ecossistema de desenvolvimento em nuvem. Desde então, a plataforma passou por uma expansão significativa, oferecendo funcionalidades como autenticação de usuários, armazenamento em nuvem, notificações push, integração com aprendizado de máquina e, mais recentemente, recursos de inteligência artificial generativa por meio do Firebase AI Logic.
+\begin{comment}
+	O Firebase constitui-se como uma plataforma abrangente de desenvolvimento para aplicações móveis e web, tendo sido incorporada ao portfólio de soluções da Google Inc. em outubro de 2014 através de processo de aquisição estratégica \cite{google2014firebase}. Originalmente fundada em 2011 por James Tamplin e Andrew Lee, a plataforma Firebase foi concebida com o propósito de fornecer uma infraestrutura de backend-as-a-service (BaaS) completa e de alta usabilidade, direcionada especificamente para simplificar o processo de desenvolvimento e implementação de aplicações digitais \cite{tamplin2021firebase}.
+	
+	A filosofia de desenvolvimento da plataforma fundamenta-se na disponibilização de um ecossistema integrado de serviços diversos, que abrangem desde funcionalidades básicas de armazenamento de dados até recursos avançados de análise comportamental e engajamento de usuários \cite{firebase2023docs}. Esta abordagem holística visa reduzir a complexidade técnica tradicionalmente associada ao desenvolvimento de backends customizados, permitindo que desenvolvedores concentrem seus esforços na criação de interfaces e experiências de usuário diferenciadas.
+\end{comment}
+
 
 \subsection{Interface de Gerenciamento e Implementação}
 
-A operacionalização da plataforma Firebase é mediada por um console web especializado, denominado Firebase Console, que representa a interface principal de gerenciamento e configuração de projetos \cite{google2023console}. Este ambiente de desenvolvimento integrado foi projetado seguindo princípios de experiência do usuário (UX) orientados à simplicidade e intuitividade, proporcionando aos desenvolvedores um fluxo de trabalho otimizado para implementação de recursos.
+A interface principal de gerenciamento do Firebase é o Firebase Console, que passou por diversas atualizações nos últimos anos. Em 2025, foi lançado o Firebase Studio, um ambiente de desenvolvimento baseado em nuvem que permite a criação de aplicações completas com suporte a inteligência artificial, prototipagem rápida e integração com ferramentas como Genkit e Project IDX\cite{firebase2025releases}.
 
-O processo de utilização inicia-se com a criação de um projeto no console, seguido pela seleção e configuração dos serviços desejados a partir de um catálogo extenso de funcionalidades disponíveis. Cada serviço oferecido pela plataforma é acompanhado de documentação técnica detalhada, incluindo guias de implementação passo-a-passo, exemplos de código e melhores práticas de desenvolvimento \cite{firebase2023implementation}.
+O console oferece uma experiência otimizada, com navegação intuitiva e suporte a funcionalidades como monitoramento de desempenho, configuração remota, autenticação, e integração com serviços de backend. A documentação oficial do Firebase fornece guias detalhados, exemplos de código e tutoriais interativos (codelabs), facilitando a implementação mesmo por desenvolvedores iniciantes.
+
+Além disso, o Firebase CLI (Interface de Linha de Comando) foi aprimorado para suportar novos recursos como Data Connect, App Hosting e integração com modelos Gemini, permitindo maior controle e automação no ciclo de desenvolvimento.
+\begin{comment}
+	A operacionalização da plataforma Firebase é mediada por um console web especializado, denominado Firebase Console, que representa a interface principal de gerenciamento e configuração de projetos \cite{google2023console}. Este ambiente de desenvolvimento integrado foi projetado seguindo princípios de experiência do usuário (UX) orientados à simplicidade e intuitividade, proporcionando aos desenvolvedores um fluxo de trabalho otimizado para implementação de recursos.
+	
+	O processo de utilização inicia-se com a criação de um projeto no console, seguido pela seleção e configuração dos serviços desejados a partir de um catálogo extenso de funcionalidades disponíveis. Cada serviço oferecido pela plataforma é acompanhado de documentação técnica detalhada, incluindo guias de implementação passo-a-passo, exemplos de código e melhores práticas de desenvolvimento \cite{firebase2023implementation}.
+	
+	A evolução do Firebase reflete a estratégia da Google de oferecer uma solução integrada e escalável para desenvolvedores, permitindo a criação de aplicações robustas com menor complexidade técnica e maior foco na experiência do usuário.
+\end{comment}
 
 \subsection{Modelo de Comercialização e Estrutura Tarifária}
 
+O Firebase adota um modelo de negócios freemium, com dois planos principais: Spark e Blaze. O plano Spark é gratuito e oferece acesso a funcionalidades básicas como autenticação, Crashlytics e Remote Config, com cotas limitadas para serviços pagos como Firestore e Cloud Storage\cite{firebase2025pricing}.
+
+Já o plano Blaze opera sob o modelo de pagamento por uso, permitindo escalabilidade conforme a demanda do projeto. Os custos são calculados com base em métricas como número de leituras e gravações em banco de dados, volume de armazenamento, e uso de funções em nuvem. Essa estrutura tarifária é integrada ao Google Cloud Billing, permitindo o uso combinado de serviços do Firebase e da infraestrutura da Google.
+
+A flexibilidade do modelo freemium torna o Firebase acessível para desenvolvedores independentes e startups, enquanto o plano Blaze atende empresas com necessidades mais complexas, oferecendo recursos avançados e maior capacidade de processamento.
+
+
+\begin{comment}
 O Firebase opera sob um modelo de negócios freemium, caracterizado pela disponibilização gratuita de funcionalidades básicas combinada com planos pagos para recursos avançados e maior capacidade de processamento \cite{google2023pricing}. Esta estrutura tarifária escalonável permite que desenvolvedores individuais e pequenas equipes iniciem projetos sem investimento inicial, enquanto organizações com demandas mais robustas podem optar por planos comerciais adequados às suas necessidades específicas.
 
 A estratégia de precificação adotada segue uma lógica de pay-as-you-scale, onde os custos são proporcionais ao volume de utilização dos recursos, incluindo métricas como número de usuários ativos, volume de dados armazenados e quantidade de operações de leitura/escrita realizadas \cite{moroney2022firebase}. Esta abordagem visa garantir a viabilidade econômica tanto para projetos em fase inicial quanto para aplicações consolidadas com grande base de usuários.
-
+\end{comment}
 \subsection{Firebase Authentication}
 
 \subsubsection{Caracterização do Serviço e Arquitetura Funcional}
@@ -100,31 +123,75 @@ Uma característica distintiva do Firebase Authentication reside em sua capacida
 
 O Firebase Authentication foi projetado com foco na integração estreita com outros componentes do ecossistema Firebase, incluindo Firebase Firestore, Firebase Realtime Database, Firebase Cloud Functions e Firebase Analytics \cite{firebase2023ecosystem}. Esta integração sistêmica permite a implementação de regras de segurança baseadas em identidade de usuário, controle de acesso granular a recursos e personalização de experiências com base no perfil de autenticação.
 
-A arquitetura do serviço fundamenta-se na aderência rigorosa a padrões industriais reconhecidos para autenticação e autorização, particularmente os protocolos OAuth 2.0 e OpenID Connect \cite{hardt2012oauth}. O OAuth 2.0 constitui-se como o padrão de facto para autorização de aplicações web e móveis, proporcionando mecanismos seguros para concessão de acesso limitado a recursos sem exposição de credenciais. Complementarmente, o OpenID Connect representa uma camada de identidade construída sobre o OAuth 2.0, fornecendo informações de identidade de usuário de forma padronizada \cite{sakimura2014openid}.
+A arquitetura do serviço fundamenta-se na aderência rigorosa a padrões industriais reconhecidos para autenticação e autorização, particularmente os protocolos OAuth 2.0 e OpenID Connect \cite{auth0oauth}. O OAuth 2.0 constitui-se como o padrão de facto para autorização de aplicações web e móveis, proporcionando mecanismos seguros para concessão de acesso limitado a recursos sem exposição de credenciais. Complementarmente, o OpenID Connect representa uma camada de identidade construída sobre o OAuth 2.0, fornecendo informações de identidade de usuário de forma padronizada \cite{openidconnect}.
 
 Esta conformidade com padrões estabelecidos facilita significativamente a integração do Firebase Authentication com sistemas de backend existentes, APIs de terceiros e infraestruturas corporativas, garantindo interoperabilidade e reduzindo a complexidade de implementação em arquiteturas híbridas ou migrações graduais de sistemas legados.
 
 
 \subsection{Firebase Firestore}
-\subsubsection{Caracterização e Arquitetura do Sistema}
 
+O desenvolvimento de aplicações modernas demanda soluções de banco de dados que ofereçam escalabilidade, sincronização em tempo real e facilidade de integração com diferentes plataformas. O Firebase Firestore, lançado pelo Google como evolução do Firebase Realtime Database, emerge como uma solução robusta para essas necessidades, oferecendo um banco de dados NoSQL totalmente gerenciado com capacidades avançadas de sincronização e escalabilidade horizontal.
+
+\subsubsection{Caracterização e Arquitetura do Sistema}
+O Cloud Firestore é um banco de dados flexível e escalável para desenvolvimento móvel, web e servidor do Firebase e Google Cloud, projetado especificamente para aplicações serverless e arquiteturas modernas \cite{firebase_choose_database}. Diferentemente dos bancos relacionais tradicionais, o Cloud Firestore é um banco de dados NoSQL orientado a documentos. Ao contrário de um banco SQL, não há tabelas ou linhas. Em vez disso, você armazena dados em documentos, que são organizados em coleções \cite{firebase_data_model}.
+
+A arquitetura do Firestore baseia-se em uma estrutura hierárquica composta por documentos e coleções. Cada documento contém um conjunto de pares chave-valor. O Cloud Firestore é otimizado para armazenar grandes coleções de documentos pequenos a médios, proporcionando flexibilidade na modelagem de dados complexos \cite{firebase_data_model}.
+
+A estruturação dos dados no Firestore oferece múltiplas opções arquiteturais. Lembre-se, quando você estrutura seus dados no Cloud Firestore, você tem algumas opções diferentes: Documentos, Múltiplas coleções, Subcoleções dentro de documentos \cite{firebase_data_model}. Esta flexibilidade permite adaptação a diferentes casos de uso e padrões de acesso aos dados.
+
+O Firestore implementa uma arquitetura distribuída globalmente, utilizando o conceito de replicação multi-região para garantir alta disponibilidade e baixa latência \cite{firebase_firestore_docs}. O sistema emprega um modelo de consistência eventual com suporte a transações ACID para operações que requerem consistência forte.
+
+A arquitetura do sistema é baseada em uma infraestrutura serverless, onde os recursos são automaticamente provisionados e escalados conforme a demanda \cite{medium_firestore_overview}. Esta abordagem elimina a necessidade de gerenciamento manual de infraestrutura, permitindo que desenvolvedores foquem na lógica de aplicação.
+
+\begin{comment}
 O Firebase Firestore constitui-se como um banco de dados NoSQL (Not Only SQL) orientado a documentos, desenvolvido e mantido pela Google como componente central do ecossistema Firebase \cite{google2023firestore}. Esta solução de armazenamento fundamenta-se em uma arquitetura distribuída e escalável, projetada especificamente para atender às demandas de aplicações móveis e web modernas que requerem sincronização de dados em tempo real entre múltiplos clientes e dispositivos \cite{chang2008bigtable}.
 
 A arquitetura do Firestore baseia-se no modelo de dados orientado a documentos, onde as informações são organizadas em estruturas hierárquicas compostas por coleções e documentos \cite{mongodb2023nosql}. Cada documento representa uma unidade de dados estruturada em formato JSON, contendo pares chave-valor que podem incluir tipos primitivos, arrays, objetos aninhados e referências a outros documentos. Esta flexibilidade estrutural permite a modelagem eficiente de dados complexos sem as restrições impostas pelos esquemas rígidos dos bancos de dados relacionais tradicionais.
 
+\end{comment}
+
 \subsubsection{Funcionalidades de Sincronização e Tempo Real}
 
+Uma das características mais distintivas do Firestore é sua capacidade de sincronização em tempo real. Como o Firebase Realtime Database, ele mantém seus dados sincronizados entre aplicações clientes através de listeners em tempo real e oferece suporte offline para dispositivos móveis e web \cite{firebase_choose_database}. Esta funcionalidade permite que aplicações respondam instantaneamente a mudanças nos dados, proporcionando experiências de usuário altamente interativas.
+
+O sistema foi projetado para suportar aplicações de grande escala com milhares de operações por segundo. O Cloud Firestore e os SDKs móveis/web do Firebase fornecem um modelo poderoso para desenvolver aplicações serverless onde o código do lado cliente acessa diretamente o banco de dados. Os SDKs permitem que clientes escutem atualizações dos dados em tempo real \cite{firebase_firestore_docs}.
+
+Para aplicações que ultrapassam milhares de operações por segundo ou centenas de milhares de usuários simultâneos, o Firestore oferece orientações específicas de otimização e padrões arquiteturais avançados que garantem performance consistente mesmo em cenários de alta carga \cite{firebase_realtime_scale}.
+
+O Firestore implementa um sistema robusto de cache local que permite funcionamento offline completo \cite{firebase_choose_database}. Quando a conectividade é restaurada, o sistema sincroniza automaticamente as mudanças locais com o servidor, resolvendo conflitos através de algoritmos de reconciliação determinísticos.
+
+\begin{comment}
 Uma característica distintiva do Firestore reside em suas capacidades de sincronização automática e atualizações em tempo real \cite{firebase2023realtime}. O sistema implementa listeners de dados que permitem às aplicações cliente receber notificações instantâneas sempre que ocorrem alterações nos dados armazenados, eliminando a necessidade de polling manual ou requisições periódicas para verificação de atualizações. Esta funcionalidade é fundamental para o desenvolvimento de aplicações colaborativas, sistemas de mensagens instantâneas e interfaces que requerem refletir mudanças de estado imediatas.
 
 O mecanismo de sincronização offline representa outro aspecto tecnológico significativo, permitindo que aplicações continuem operando mesmo durante períodos de conectividade intermitente ou ausente \cite{terry2013replicated}. O Firestore mantém uma cache local dos dados utilizados pela aplicação, sincronizando automaticamente as alterações quando a conectividade é restabelecida, garantindo consistência eventual dos dados distribuídos.
-
+\end{comment}
 \subsubsection{Escalabilidade e Modelo de Precificação}
 
+O Cloud Firestore é o banco de dados JSON-compatível de nível empresarial recomendado, confiado por mais de 600.000 desenvolvedores \cite{medium_firestore_overview}. É adequado para aplicações com modelos de dados ricos que requerem capacidade de consulta, escalabilidade e alta disponibilidade. O sistema oferece escalabilidade automática baseada na demanda, ajustando recursos de forma transparente conforme o crescimento da aplicação.
+
+O modelo de precificação do Google Firestore é projetado para escalar com as necessidades da sua aplicação, oferecendo uma combinação de cotas gratuitas e precificação pay-as-you-go \cite{airbyte_firestore_pricing}. Esta abordagem permite que startups iniciem seus projetos sem custos iniciais significativos, pagando apenas conforme o crescimento do uso.
+
+O modelo de cobrança baseia-se em três componentes principais \cite{firebase_pricing}:
+\begin{itemize}
+	\item Operações de leitura e escrita de documentos
+	\item Armazenamento de dados
+	\item Largura de banda de rede
+\end{itemize}
+
+Comece com o Firebase sem custo e, em seguida, escale mundialmente para milhões de usuários, pagando apenas pelo que usar \cite{firebase_pricing}. Esta estrutura de precificação alinha os custos operacionais com o crescimento real da aplicação, proporcionando previsibilidade financeira para projetos de diferentes escalas.
+
+Para maximizar a eficiência de custos, é fundamental implementar estratégias de otimização de consultas e estruturação adequada dos dados. Aprenda as melhores práticas do Firestore para otimizar o desempenho de suas consultas e fique atualizado com os recursos e capacidades mais recentes \cite{estuary_firestore_best_practices}. Estas práticas incluem indexação estratégica, denormalização controlada e padrões de consulta eficientes.
+
+Explore as principais diferenças entre Firebase e Firestore, focando em seus modelos de dados, escalabilidade e performance em aplicações baseadas em nuvem \cite{airbyte_firebase_vs_firestore}. Quando comparado ao Realtime Database tradicional, o Firestore oferece vantagens significativas em termos de escalabilidade, estrutura de dados mais rica e capacidades de consulta avançadas.
+
+O Firestore posiciona-se como uma solução enterprise-ready, adequada tanto para prototipagem rápida quanto para aplicações de produção de grande escala. Sua arquitetura serverless e modelo de precificação flexível o tornam especialmente atrativo para startups e empresas que buscam acelerar o desenvolvimento sem comprometer a escalabilidade futura \cite{firebase_io_2024}.
+
+\begin{comment}
 O Firestore foi arquitetado para proporcionar escalabilidade horizontal automática, adaptando-se dinamicamente ao volume de dados e quantidade de operações sem intervenção manual dos desenvolvedores \cite{google2023scalability}. Esta característica é particularmente relevante para aplicações com padrões de uso imprevisíveis ou crescimento exponencial de usuários, onde a capacidade de processamento deve ajustar-se automaticamente à demanda.
 
 O modelo de precificação adotado segue uma estrutura pay-per-operation, onde os custos são calculados com base no número de operações de leitura, escrita e exclusão realizadas, complementado por tarifas de armazenamento e transferência de dados \cite{firebase2023pricing}. Esta abordagem granular de cobrança permite otimização de custos através do design eficiente de consultas e estratégias de cache, tornando-se economicamente viável tanto para projetos em escala reduzida quanto para aplicações empresariais de grande porte.
 
-
+\end{comment}
 \section{Compose Multiplataform}
 \subsection{Fundamentação Conceitual e Arquitetural}
 
