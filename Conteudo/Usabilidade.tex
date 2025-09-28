@@ -27,10 +27,31 @@ O design de interface de usuário bem-sucedido torna-se mais fácil quando você
 
 Muitos designers e educadores de Interface de Usuário (UI) discutem princípios a serem seguidos ao projetar os aspectos funcionais de uma UI \cite{tandfonline_ui_principles}. No entanto, muitos princípios de UI foram propostos, espalhados na literatura científica, criando a necessidade de uma abordagem unificada para a compreensão e aplicação destes conceitos.
 
+\section{Avaliação Heurística}
+A avaliação heurística constitui-se como um método de inspeção de usabilidade amplamente reconhecido no campo da Interação Humano-Computador (IHC), desenvolvido originalmente por Jakob Nielsen e Rolf Molich em 1990 \cite{nielsen1990heuristic}. Este método fundamenta-se na análise sistemática de interfaces através da aplicação de princípios heurísticos estabelecidos, permitindo a identificação de problemas de usabilidade sem a necessidade direta de envolvimento de usuários finais durante o processo de avaliação \cite{nielsen1994usability}.
+
+As dez heurísticas de usabilidade de Nielsen representam o conjunto mais amplamente aplicado na literatura de IHC, abrangendo aspectos fundamentais como visibilidade do status do sistema, correspondência entre sistema e mundo real, controle e liberdade do usuário, consistência e padrões, prevenção de erros, reconhecimento ao invés de memorização, flexibilidade e eficiência de uso, design estético e minimalista, auxílio aos usuários no reconhecimento, diagnóstico e recuperação de erros, e disponibilização de ajuda e documentação \cite{nielsen1995ten}.
+
+A aplicação da avaliação heurística envolve tipicamente a participação de três a cinco especialistas em usabilidade, que examinam independentemente a interface e identificam violações dos princípios heurísticos \cite{nielsen1994finding}. Este método oferece vantagens significativas em termos de custo-benefício, rapidez de aplicação e capacidade de identificação de problemas críticos de usabilidade durante as fases iniciais do desenvolvimento de sistemas interativos \cite{zhang2003comparison}.
+
+\section{Avaliação de Acessibilidade Digital}
+A avaliação de acessibilidade digital representa um domínio especializado da IHC que se concentra na garantia de que interfaces e sistemas computacionais sejam utilizáveis por pessoas com diferentes tipos de deficiência e limitações funcionais \cite{petrie2007accessibility}. Esta área fundamenta-se nos princípios de design universal e inclusivo, visando eliminar barreiras que possam impedir ou dificultar o acesso de usuários com deficiências visuais, auditivas, motoras ou cognitivas aos recursos tecnológicos.
+
+As Diretrizes de Acessibilidade para Conteúdo Web (WCAG) 2.1, desenvolvidas pelo World Wide Web Consortium (W3C), estabelecem o padrão internacional mais reconhecido para avaliação de acessibilidade digital \cite{w3c2018wcag}. Estas diretrizes fundamentam-se em quatro princípios básicos: perceptibilidade (informações e componentes da interface devem ser apresentados de forma que os usuários possam percebê-los), operabilidade (componentes da interface e navegação devem ser operáveis), compreensibilidade (informações e operações da interface devem ser compreensíveis), e robustez (conteúdo deve ser suficientemente robusto para ser interpretado por uma ampla variedade de tecnologias assistivas).
+
+A avaliação de acessibilidade emprega métodos combinados que incluem inspeção automatizada através de ferramentas especializadas, avaliação manual por especialistas em acessibilidade, e testes com usuários reais utilizando tecnologias assistivas como leitores de tela, navegação por teclado e dispositivos de entrada alternativos \cite{abascal2019inclusive}. A integração de critérios de acessibilidade no processo de desenvolvimento de aplicações móveis torna-se particularmente relevante considerando que dispositivos móveis representam frequentemente a principal forma de acesso à tecnologia digital para pessoas com deficiência \cite{trewin2013mobile}.
+
+\section{Integração de Usabilidade e Acessibilidade no Desenvolvimento de Aplicações}
+A convergência entre avaliação de usabilidade e acessibilidade no contexto de desenvolvimento de aplicações móveis representa uma abordagem holística que reconhece a interconexão entre facilidade de uso e inclusividade digital \cite{power2012equal}. Esta integração é particularmente crítica no desenvolvimento de aplicações de segurança e emergência, onde a usabilidade deficiente pode comprometer a eficácia da ferramenta em situações críticas, e barreiras de acessibilidade podem excluir usuários em situações de vulnerabilidade.
+
+Metodologias contemporâneas de avaliação combinam princípios heurísticos tradicionais com critérios específicos de acessibilidade, resultando em frameworks integrados que abordam simultaneamente eficiência, eficácia, satisfação do usuário e inclusividade \cite{yesilada2015evaluating}. A aplicação destes métodos no contexto de aplicações de segurança pessoal requer consideração especial para cenários de uso sob estresse, limitações temporais críticas, e diversidade de perfis de usuários que podem incluir pessoas com diferentes capacidades funcionais e níveis de letramento digital. E a avaliação de acessibilidae que visa garantir o uso por qualquer usuário.
+
 \section{Usabilidade SheSafe}
 \begin{comment}
 	Você tem que deixar claro que essas telas fazem parte do projeto inicial e que procurou colocar elementos nas telas de modo a atender os princípios de usabilidade, mas não precisa ficar dizendo qual é qual.
 \end{comment}
+Foram realizadas três avaliações principais para o aplicativo SheSafe: A avaliação de rapída e rasteira, encontrada no anexo B, visa fazer uma tomada rápida de opinião e oferecer aos interessados indicações gerais sobre a qualidade da experiência do usuário. A avaliação de usabilidade, encontrada no anexo A, que tem o objetivo de verificar o que acontece com o usuário. E o teste de acessibilidade, encontrado no anexo C, que tem como objetivo a verificação do uso do aplicativo por qualquer usuário.
+
 A seguir é possível ver as telas que fazem parte do wireframe do projeto inicial da interface. Nas telas foram inseridos elementos que atendem aos princípios de usabilidae e os reforçam.
 \subsection{Tela 1 - Home}
 \begin{figure}[h]
@@ -437,37 +458,61 @@ Conformidade de realização de atividades – Não se aplica.
 
 \end{alineas}
 \end{comment}
-Nesta tela serão exibidos os pedidos de socorro enviados em forma de listagem. Cada pedido será identificado em um card. Neste card conterá a data do pedido enviado e a localização de onde ele foi enviado. Será possível clicar no link das coordenadas de localização e ser direcionado para o aplicativo de mapas do usuário. O link será exibido com um sublinhado indicando que é um elemento clicavel como acontece em qualquer aplicativo.
-\section{Avaliação de Usabilidade}
+Nesta tela serão exibidos os pedidos de socorro enviados em forma de listagem. Cada pedido será identificado em um card. Neste card conterá a data do pedido enviado e a localização de onde ele foi enviado. Será possível clicar no link das coordenadas de localização e ser direcionado para o aplicativo de mapas do usuário. O link será exibido com um sublinhado indicando que é um elemento clicável como acontece em qualquer aplicativo.
+\begin{comment}
+\section{Avaliação realizadas}
 \subsection{Respostas das avaliações}
-As respostas das avaliações dos usuários  e dos avaliadores especialistas podem ser encontradas no Anexo A deste documento.
-\subsection{Correções e melhorias}
-O protótipo se mostrou muito agradável aos participantes das avaliações. Alguns foram elencados e serão trabalhados para que sejam feitas as alterações. Alguns pontos foram bastante mencionados e são elencados abaixo.
+Os documentos contendo as avaliações dos herísticas e rasteiras dos avaliadores podem ser encontradas no Anexo A deste documento.
+
+Os documentos contendo as avaliações de acessibilidae dos avaliadores podem ser encontrados no Anexo B deste documento.
+
+\end{comment}
+
+\section{Avaliação com usuário}
+A avaliação com usuário constitui-se como um paradigma metodológico fundamental no campo da Interação Humano-Computador (IHC), caracterizado pela participação direta de usuários reais no processo de análise e validação de sistemas interativos \cite{dix2003human}. Esta abordagem fundamenta-se no princípio de que a qualidade de um sistema deve ser mensurada a partir da perspectiva de quem efetivamente o utiliza, considerando suas necessidades, expectativas, limitações cognitivas e contextos de uso específicos \cite{preece2015interaction}.
+
+Diferentemente dos métodos de inspeção realizados por especialistas, a avaliação com usuário oferece insights diretos sobre a experiência real de interação, revelando aspectos que podem não ser identificados através de análises teóricas ou heurísticas \cite{nielsen1994usability}. Esta metodologia permite a observação de comportamentos autênticos, identificação de estratégias de uso não previstas pelos designers, e compreensão das dificuldades reais enfrentadas pelos usuários em contextos naturais de utilização.
+
+\subsection{Avaliação do usuário SheSafe}
+As avaliações com usuário da aplicação SheSafe foram conduzidas entre os dias 24 e 28 de setembro de 2025, envolvendo participantes que executaram três tarefas específicas relacionadas às funcionalidades principais do sistema. Os testes foram realizados com a versão debug da aplicação Android, disponibilizada através de um link de download compartilhado.
+
+Em relação ao cumprimento dos objetivos das tarefas, os resultados demonstraram 100\% de taxa de sucesso, com todas as participantes conseguindo completar as três atividades propostas: enviar um pedido de socorro pela primeira vez, cadastrar um novo contato seguro e alterar a mensagem padrão do pedido de ajuda. Não foram registrados erros durante a execução de nenhuma das tarefas, indicando que a interface apresenta boa intuitividade e que os fluxos de interação estão adequadamente projetados para facilitar a conclusão das ações pelos usuários.
+
+A análise dos tempos de execução revelou performance satisfatória em todas as tarefas avaliadas. Para o envio do primeiro pedido de socorro, os tempos variaram entre 21 e 31 segundos, com média de 25,3 segundos. O cadastro de contatos seguros apresentou tempos mais consistentes, variando entre 13 e 17 segundos (média de 14,3 segundos). A alteração da mensagem padrão foi a tarefa executada mais rapidamente, com tempos entre 11 e 14 segundos (média de 12,3 segundos). Esta progressão temporal sugere que as funcionalidades mais críticas mantêm tempos de resposta adequados para situações de emergência, enquanto as funcionalidades de configuração são executadas de forma ainda mais eficiente.
+
+No que se refere às impressões qualitativas, as avaliadoras expressaram percepções predominantemente positivas sobre diferentes aspectos da aplicação. A navegação foi consistentemente avaliada como adequada por todas as participantes, assim como o design visual e a usabilidade geral do sistema.
+\begin{comment}
+	Mônica Abreu destacou especificamente que "a interface é muito fácil e simples de aprender a utilizar", enquanto Wannielly Barbosa elogiou a "navegação fluida e sem problema para mudar de tela", caracterizando ainda a iniciativa como "ótima para mulheres".
+\end{comment}
+
+Contudo, emergiu um padrão consistente de feedback relacionado à ausência de confirmações explícitas do sistema após a execução de determinadas ações. Algumas das avaliadoras relataram especificamente a "falta de um retorno ao cadastrar o contato", enquanto uma outra observou que "ao alterar mensagem, só vi que alterou quando mudou na tela". Este feedback indica uma oportunidade de melhoria significativa no design de interação, particularmente na implementação de feedback imediato e explícito para ações críticas do usuário.
+
+A convergência deste feedback específico sobre a ausência de confirmações do sistema sugere que esta deficiência pode impactar negativamente a confiança do usuário na aplicação, especialmente em um contexto de uso onde a certeza sobre a execução correta das ações é fundamental para a eficácia do sistema de segurança. A implementação de mensagens de confirmação, notificações toast, ou outros elementos de feedback visual imediato deveria ser considerada como prioridade para futuras iterações do desenvolvimento, visando aumentar a transparência do sistema e a confiança do usuário nas operações realizadas.
+
+\section{Correções e melhorias}
+O protótipo se mostrou muito agradável aos participantes das avaliações. Alguns foram elencados e foram trabalhados para que acontecessem as devidas alterações. Alguns pontos foram bastante mencionados na avaliação heurísticas e rasteira. Sendo eles: 
 \begin{itemize}
-\item Alteração de contato – Será adicionado um botão ou menu de contexto com apresentará a opção de edição do contato já salvo para que não seja preciso excluir um contato primeiro para depois adicionar seu novo número.
-\item Exclusão de contato – Será adicionada uma confirmação para prevenir de uma exclusão de contato acidental.
-\item Configurações – Será alterado o título da tela de configurações para corresponder com a tela.
-\item Ícone de logout – Será buscado um novo ícone ou repaginado o ícone atual para ficar mais intuitivo. 
-\item Alteração de mensagem padrão – Será adicionado um feedback após realizar a alteração da mensagem para que fique mais claro de que a ação ocorreu com sucesso.
-\item Campo de busca – Será adicionado um hint ao campo de busca informando o que o usuário deve preencher.
-\item Botões de voltar – Diminuição dos ícones de voltar nas telas que possuem.
+\item Alteração de contato – Foi adicionado um menu de contexto que apresentará a opção de edição do contato já salvo para que não seja preciso excluir um contato primeiro para depois adicionar seu novo número.
+\item Exclusão de contato – Foi adicionada uma confirmação para prevenir de uma exclusão de contato acidental.
+\item Configurações – Foi alterado o título da tela de configurações para corresponder com a tela.
+\item Ícone de logout – Foi alterado o ícone para ficar mais intuitivo. 
+\item Alteração de mensagem padrão – Foi adicionado um feedback após realizar a alteração da mensagem para que fique mais claro de que a ação ocorreu com sucesso.
+%\item Campo de busca – Será adicionado um hint ao campo de busca informando o que o usuário deve preencher.
+\item Botões de voltar – Foi descrescido o tamnaho dos ícones de voltar nas telas que possuem.
 \end{itemize}
  
-\subsection{Nova heurística}
-Uma nova heurística a ser introduzida para interfaces mobile acredito que possa ser a opção de login com redes sociais. Hoje em dia é sim muito comum já termos essa opção nos aplicativos, porém ainda existem aqueles que não possuem essa funcionalidade. Essa heurística poderia avaliar a possibilidade de se colocar esse tipo de login, ou seja, se é viável ou se não se aplica dependendo do tipo de sistema.
+Uma nova heurística que foi introduzida na aplicação SheSafe foi o login com redes sociais. Hoje em dia é sim muito comum já termos essa opção nos aplicativos, porém ainda existem aqueles que não possuem essa funcionalidade. O login da aplicação SheSafe é feito através da conta Google, e com o tempo a ideia é implementar o login com mais redes sociais.
 
-\section{Conclusões sobre as avaliações}
-Após recebidas e analisadas as avalições foi possível perceber que o protótipo se mostra muito promissor. Apesar de poucos apontamentos alguns deles se tornaram bastante perceptíveis visto que mais de um avaliador comentou sobre o mesmo problema. 
+No quesitos das avaliações de acessibilidade foi possível perceber que o protótipo atendeu as epectativas de quem o avaliou. Apesar de poucos apontamentos alguns deles se tornaram bastante perceptíveis visto que mais de um avaliador comentou sobre o mesmo problema. Desta forma as seguintes alterações foram realizadas.
 
-Pontos de acessibilidade a serem ajustados
 \begin{itemize}
 \item Alteração do nome da Tela 7 para condizer e identificar unicamente a tela de configurações
-\item Criação de tooltip para cada menu de ação na tela 6 para assim melhor informar o que cada menu faz
-\item Atentar ao uso do mapa na codificação para garantia de permissões necessárias.
-\item Aplicar hint ao campo de busca para melhor definição do que se espera como entrada
-\item Adicionar tolltip ao botão de adicionar contato seguro para melhor acessibilidade
-\item Melhorar a formatação dos rótulos dos campos do formulário de cadastro de contato
+%\item Criação de tooltip para cada menu de ação na tela 6 para assim melhor informar o que cada menu faz
+%\item Atentar ao uso do mapa na codificação para garantia de permissões necessárias.
+%\item Aplicar hint ao campo de busca para melhor definição do que se espera como entrada
+\item Adicionado tolltip ao botão de adicionar contato seguro para melhor acessibilidade
+\item Melhorara da formatação dos rótulos dos campos do formulário de cadastro de contato
 \item Aplicação de visual de link na listagem de pedidos enviados na tela 8
-\item Reavaliar o contraste dos botões dos dialogs
+\item Reavaliado o contraste dos botões dos dialogs
 \end{itemize}
 
