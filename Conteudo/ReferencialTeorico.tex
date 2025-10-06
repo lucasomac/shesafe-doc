@@ -66,7 +66,7 @@ O ambiente incorpora um conjunto robusto de ferramentas e frameworks para implem
 \section{Firebase}
 \subsection{Caracterização e Contextualização Histórica}
 
-O Firebase é uma plataforma de desenvolvimento de aplicações móveis e web que integra diversos serviços em nuvem, operando sob o modelo de Backend-as-a-Service (BaaS). Fundado em 2011 por James Tamplin e Andrew Lee, o Firebase foi inicialmente concebido como uma solução para sincronização de dados em tempo real, evoluindo rapidamente para atender a demandas mais amplas do desenvolvimento moderno1\cite{firebase2025cloudnext}.
+O Firebase é uma plataforma de desenvolvimento de aplicações móveis e web que integra diversos serviços em nuvem, operando sob o modelo de Backend-as-a-Service (BaaS). Fundado em 2011 por James Tamplin e Andrew Lee, o Firebase foi inicialmente concebido como uma solução para sincronização de dados em tempo real, evoluindo rapidamente para atender a demandas mais amplas do desenvolvimento moderno\cite{firebase2025cloudnext}.
 
 Em outubro de 2014, a Google adquiriu o Firebase, incorporando-o ao seu ecossistema de desenvolvimento em nuvem. Desde então, a plataforma passou por uma expansão significativa, oferecendo funcionalidades como autenticação de usuários, armazenamento em nuvem, notificações push, integração com aprendizado de máquina e, mais recentemente, recursos de inteligência artificial generativa por meio do Firebase AI Logic.
 \begin{comment}
@@ -83,6 +83,8 @@ A interface principal de gerenciamento do Firebase é o Firebase Console, que pa
 O console oferece uma experiência otimizada, com navegação intuitiva e suporte a funcionalidades como monitoramento de desempenho, configuração remota, autenticação, e integração com serviços de backend. A documentação oficial do Firebase fornece guias detalhados, exemplos de código e tutoriais interativos (codelabs), facilitando a implementação mesmo por desenvolvedores iniciantes.
 
 Além disso, o Firebase CLI (Interface de Linha de Comando) foi aprimorado para suportar novos recursos como Data Connect, App Hosting e integração com modelos Gemini, permitindo maior controle e automação no ciclo de desenvolvimento.
+
+O Firebase console foi utilizado no projeto para gerenciamentos dos provedores de login, acesso a estrutura de dados salvo e configuração de uso das apis por ele fornecidas.
 \begin{comment}
 	A operacionalização da plataforma Firebase é mediada por um console web especializado, denominado Firebase Console, que representa a interface principal de gerenciamento e configuração de projetos \cite{google2023console}. Este ambiente de desenvolvimento integrado foi projetado seguindo princípios de experiência do usuário (UX) orientados à simplicidade e intuitividade, proporcionando aos desenvolvedores um fluxo de trabalho otimizado para implementação de recursos.
 	
@@ -126,6 +128,8 @@ O Firebase Authentication foi projetado com foco na integração estreita com ou
 A arquitetura do serviço fundamenta-se na aderência rigorosa a padrões industriais reconhecidos para autenticação e autorização, particularmente os protocolos OAuth 2.0 e OpenID Connect \cite{auth0oauth}. O OAuth 2.0 constitui-se como o padrão de facto para autorização de aplicações web e móveis, proporcionando mecanismos seguros para concessão de acesso limitado a recursos sem exposição de credenciais. Complementarmente, o OpenID Connect representa uma camada de identidade construída sobre o OAuth 2.0, fornecendo informações de identidade de usuário de forma padronizada \cite{openidconnect}.
 
 Esta conformidade com padrões estabelecidos facilita significativamente a integração do Firebase Authentication com sistemas de backend existentes, APIs de terceiros e infraestruturas corporativas, garantindo interoperabilidade e reduzindo a complexidade de implementação em arquiteturas híbridas ou migrações graduais de sistemas legados.
+
+O Firebase Authentication foi utilizado no projeto para disponibilizar criação e login de usuários de forma rápida e segura.
 
 
 \subsection{Firebase Firestore}
@@ -186,6 +190,7 @@ Explore as principais diferenças entre Firebase e Firestore, focando em seus mo
 
 O Firestore posiciona-se como uma solução enterprise-ready, adequada tanto para prototipagem rápida quanto para aplicações de produção de grande escala. Sua arquitetura serverless e modelo de precificação flexível o tornam especialmente atrativo para startups e empresas que buscam acelerar o desenvolvimento sem comprometer a escalabilidade futura \cite{firebase_io_2024}.
 
+O Firestore foi utilizado no projeot para salvar os contatos seguros, os dados se envio de pedido de ajuda e também as configurações particulares de cada usúario. 
 \begin{comment}
 O Firestore foi arquitetado para proporcionar escalabilidade horizontal automática, adaptando-se dinamicamente ao volume de dados e quantidade de operações sem intervenção manual dos desenvolvedores \cite{google2023scalability}. Esta característica é particularmente relevante para aplicações com padrões de uso imprevisíveis ou crescimento exponencial de usuários, onde a capacidade de processamento deve ajustar-se automaticamente à demanda.
 
@@ -216,3 +221,5 @@ O framework suporta a criação de expect/actual declarations, um mecanismo que 
 O Compose Multiplatform implementa um conjunto avançado de otimizações de performance destinadas a garantir experiências de usuário fluidas e responsivas em todas as plataformas suportadas. O sistema de renderização utiliza técnicas de virtualização para gerenciamento eficiente de listas extensas, lazy loading para componentes complexos, e algoritmos otimizados de diff para minimizar operações de layout e desenho \cite{compose2023performance}.
 
 A arquitetura do framework incorpora conceitos de renderização baseada em canvas personalizado para cada plataforma, permitindo consistência visual absoluta entre diferentes sistemas operacionais, enquanto mantém performance nativa através da utilização de APIs de baixo nível específicas de cada plataforma \cite{skia2023graphics}. Esta abordagem híbrida garante tanto a uniformidade da experiência do usuário quanto a eficiência computacional necessária para aplicações demanding em recursos gráficos.
+
+O Compose Multiplataform foi utilizado no projeto para manter um padrão de projeto já pensado numa futura expanssão para outros sistemas operacionais. Inicialmente o SheSafe será um aplicativo para Android, porém já possui estrutura inicial pronta para um possível expanssão para o iOS.
