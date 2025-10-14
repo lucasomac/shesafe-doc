@@ -17,6 +17,7 @@ A estrutura de camadas implementada no projeto pode ser observada na organizaç�
 	 \includegraphics[width=0.8\linewidth]{images/shesafe/screenshot-clean-architecture-shesafe.png}\\
 	\caption{Screenshot da estrutura de pastas do módulo androidApp mostrando os pacotes domain, data, framework e presentation}
 	\label{fig:estrutura_pastas_androidapp}
+	\legend{Fonte: Próprio Autor}
 \end{figure}
 \subsubsection{Camada de Domínio (Domain Layer)}
 A camada de domínio representa o núcleo da aplicação, contendo as regras de negócio e entidades fundamentais do sistema. Esta camada é completamente independente de frameworks e tecnologias específicas, garantindo que a lógica de negócio permaneça isolada de detalhes de implementação. No projeto SheSafe, a camada de domínio está organizada no pacote \path{br.com.lucolimac.shesafe.android.domain} e compreende três subpacotes principais:
@@ -44,12 +45,123 @@ O subpacote \texttt{service} contém interfaces de serviço e suas implementaç�
 O subpacote \texttt{data.source} fornece implementações concretas das interfaces \texttt{DataSource}, delegando operações para os serviços Firebase correspondentes. Classes como \texttt{SecureSecureContactDataSourceImpl}, \texttt{HelpRequestDataSourceImpl}, \texttt{SettingsDataSourceImpl}, \texttt{AuthDataSourceImpl} e \texttt{HelpMessageDataSourceImpl} tratam exceções e convertem resultados conforme necessário, atuando como adaptadores entre as abstrações da camada de dados e os serviços concretos do framework.
 
 O subpacote \texttt{di} (\textit{Dependency Injection}) contém a configuração de injeção de dependências utilizando o framework Koin. O objeto \texttt{SheSafeDependenciesInjection} define o módulo Koin que registra todas as dependências do projeto, estabelecendo como instâncias de serviços, fontes de dados, repositórios, casos de uso e ViewModels devem ser criadas e injetadas. Esta configuração centralizada facilita a gestão de dependências e promove testabilidade através da possibilidade de substituir implementações reais por mocks durante testes.
+
+\subsection{Padrão MVVM (Model-View-ViewModel)}
+A camada de apresentação da aplicação adota o padrão arquitetural MVVM (\textit{Model-View-ViewModel}), amplamente recomendado para desenvolvimento Android por proporcionar separação clara entre lógica de apresentação e interface de usuário \cite{microsoft2023mvvm}. Este padrão facilita testes unitários da lógica de apresentação e permite que mudanças na interface não afetem a lógica subjacente.
+\begin{figure}[htbp]
+	\centering
+	 \includegraphics[width=0.8\linewidth]{images/shesafe/diagrama-mvvm.png}\\
+	\caption{Diagrama ilustrando o fluxo de dados no padrão MVVM implementado no SheSafe}
+	\label{fig:mvvm_fluxo}
+	\legend{Fonte: Próprio Autor}
+\end{figure}
+
+\subsubsection{Camada de Apresentação (Presentation Layer)}
+A camada de apresentação, localizada no pacote \path{br.com.lucolimac.shesafe.android.presentation}, organiza-se em diversos subpacotes especializados que implementam diferentes aspectos da interface de usuário e sua lógica associada.
+
+O subpacote \texttt{viewModel} contém classes ViewModel que gerenciam o estado da interface e coordenam interações entre a View e a camada de domínio. Classes como \texttt{SecureContactViewModel}, \texttt{HelpRequestViewModel}, \texttt{SettingsViewModel}, \texttt{AuthViewModel}, \texttt{HomeViewModel} e \texttt{ProfileViewModel} estendem a classe base \texttt{ViewModel} do Android Architecture Components, garantindo que o estado da interface sobreviva a mudanças de configuração. Estas classes utilizam \texttt{StateFlow} e \texttt{Flow} para expor dados de forma reativa, permitindo que a interface observe mudanças de estado e se atualize automaticamente.
+
+O subpacote \texttt{component} agrupa componentes reutilizáveis da interface de usuário construídos com Jetpack Compose. Componentes como \texttt{AppLogo}, \texttt{SearchBar}, \texttt{LastSentCard}, \texttt{SheSafeDialog}, \texttt{SheSafeBottomBar} e \texttt{SettingItem} encapsulam elementos visuais específicos que podem ser compostos para formar telas completas. Esta modularização promove reutilização de código e consistência visual em toda a aplicação.
+
+O subpacote \texttt{navigation} implementa a estrutura de navegação da aplicação utilizando o Jetpack Navigation Compose. Define rotas de navegação como constantes (\texttt{HOME\_ROUTE}, \texttt{SECURE\_CONTACTS\_ROUTE}, \texttt{PROFILE\_ROUTE}, etc.) e fornece funções de extensão para o \texttt{NavController} que facilitam navegação entre telas. A classe \texttt{NavigationItem} representa itens do menu de navegação inferior, contendo informações sobre ícones e rotas associadas.
+
+O subpacote \texttt{theme} define o sistema de design da aplicação através de arquivos que especificam cores (\texttt{Color.kt}), tipografia (\texttt{Typography.kt}), formas (\texttt{Shape.kt}) e o tema geral (\texttt{SheSafeTheme.kt}). Esta organização centralizada garante consistência visual e facilita ajustes globais no design da aplicação.
+
+O subpacote \texttt{actions} contém classes que encapsulam ações complexas da interface, como \texttt{ScreenAction}, que implementa lógica para determinar qual tipo de diálogo deve ser exibido baseado no estado da aplicação (por exemplo, se há contatos seguros cadastrados).
+
+O subpacote \texttt{model} define modelos específicos da camada de apresentação, como \texttt{DialogModel}, que encapsula informações necessárias para renderizar diálogos customizados, incluindo títulos, mensagens, textos de botões e callbacks para ações.
+
+\section{Tecnologias e Frameworks}
+\subsection{Jetpack Compose e Compose Multiplatform}
+A interface de usuário da aplicação SheSafe foi desenvolvida utilizando Jetpack Compose, o toolkit moderno de UI declarativa do Android, e preparada para expansão multiplataforma através do Compose Multiplatform \cite{google2024compose}. Esta escolha tecnológica representa uma mudança paradigmática em relação ao desenvolvimento tradicional baseado em XML, oferecendo vantagens significativas em termos de produtividade, testabilidade e manutenibilidade.
+
+O Jetpack Compose fundamenta-se no paradigma declarativo de construção de interfaces, onde o desenvolvedor descreve o estado desejado da UI através de funções composable, e o framework gerencia automaticamente a renderização e atualizações necessárias. Esta abordagem elimina a necessidade de manipulação imperativa de views e simplifica substancialmente o gerenciamento de estado da interface.
+
+A estrutura do projeto demonstra preparação para desenvolvimento multiplataforma através da inclusão do módulo \texttt{shared} configurado com Kotlin Multiplatform. O arquivo \texttt{settings.gradle.kts} referencia explicitamente ambos os módulos (\texttt{androidApp} e \texttt{shared}), indicando a intenção de compartilhar código entre diferentes plataformas. O arquivo \texttt{build.gradle.kts} na raiz do projeto inclui plugins para \texttt{kotlinMultiplatform} e \texttt{jetbrainsCompose}, confirmando a configuração para suporte multiplataforma.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{images/shesafe/settings-gradle.png}\\
+	\caption{Screenshot do arquivo settings.gradle.kts mostrando a inclusão dos módulos androidApp e shared}
+	\label{fig:settings_gradle}
+	\legend{Fonte: Próprio Autor}
+\end{figure}
+A adoção do Compose Multiplatform posiciona a aplicação para futura expansão para iOS e web, permitindo compartilhamento substancial de código de lógica de negócio e interface de usuário entre plataformas. Esta estratégia alinha-se com o objetivo de maximizar o alcance da ferramenta de proteção, disponibilizando-a para usuários independentemente da plataforma móvel utilizada.
+
+\subsection{Firebase como Backend-as-a-Service}
+A aplicação utiliza o Firebase como solução de backend-as-a-service, aproveitando múltiplos serviços da plataforma para diferentes funcionalidades. O Firebase Firestore atua como banco de dados NoSQL em tempo real, armazenando contatos seguros, pedidos de ajuda e configurações do usuário. O Firebase Authentication gerencia autenticação de usuários através do Google Sign-In. O Firebase Crashlytics monitora erros e crashes da aplicação em produção.
+
+A inicialização do Firebase ocorre na classe \texttt{SheSafeApplication} através do método \texttt{FirebaseProvider.initialize()}, que configura as instâncias necessárias de \texttt{FirebaseAuth} e \texttt{FirebaseFirestore}. Estas instâncias são posteriormente injetadas nas classes de serviço através do Koin, promovendo testabilidade e desacoplamento.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{images/shesafe/firebase-initializer.png}\\
+		\caption{Screenshot da classe SheSafeApplication mostrando a inicialização do Firebase e do Koin}
+	\label{fig:shesafe_application}
+	\legend{Fonte: Próprio Autor}
+\end{figure}
+A estrutura de dados no Firestore organiza-se hierarquicamente, utilizando o email do usuário autenticado como identificador de documento principal. Por exemplo, contatos seguros são armazenados na coleção \texttt{secureContacts/[email]/contacts}, garantindo isolamento de dados entre diferentes usuários. Esta estrutura é implementada consistentemente em todos os serviços Firebase, como pode ser observado na classe \texttt{SecureContactFirebaseService}.
+\subsection{Kotlin Coroutines e Flow}
+A aplicação faz uso extensivo de Kotlin Coroutines para gerenciamento de operações assíncronas, evitando bloqueio da thread principal e garantindo responsividade da interface. Todas as operações de acesso a dados, desde chamadas ao Firestore até processamento de casos de uso, são implementadas como funções \texttt{suspend} que podem ser pausadas e retomadas sem bloquear threads.
+
+A biblioteca Flow do Kotlin é utilizada para emissão reativa de dados, permitindo que observadores (como ViewModels) recebam atualizações automaticamente quando dados subjacentes mudam. Casos de uso retornam \texttt{Flow} de resultados, e ViewModels expõem \texttt{StateFlow} para que composables da interface observem mudanças de estado. Esta arquitetura reativa garante que a interface esteja sempre sincronizada com o estado mais recente dos dados.
+
+O uso de \texttt{CoroutineDispatcher} configurado para \texttt{Dispatchers.IO} nas implementações de casos de uso garante que operações de I/O sejam executadas em pool de threads apropriado, otimizando performance e evitando sobrecarga da thread principal. Esta estratégia é observável em todas as classes de caso de uso, como \texttt{SecureContactUseCaseImpl}.
+
+\subsection{Injeção de Dependências com Koin}
+O projeto utiliza o framework Koin para injeção de dependências, configurando todas as dependências da aplicação no módulo definido em \texttt{SheSafeDependenciesInjection}. O Koin foi escolhido por sua simplicidade, integração nativa com Kotlin e performance adequada para aplicações Android.
+
+A configuração do Koin utiliza DSL declarativa para registrar fábricas de instâncias, bindings de interfaces para implementações concretas, e ViewModels. A função \texttt{factoryOf()} cria novas instâncias sempre que solicitado, enquanto \texttt{viewModelOf()} registra ViewModels com escopo apropriado para sobreviver a mudanças de configuração. O método \texttt{bind<>()} estabelece mapeamento entre interfaces e implementações, permitindo que classes dependam de abstrações ao invés de implementações concretas.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\linewidth]{images/shesafe/dependencie-injection.png}\\
+	\caption{Screenshot da classe SheSafeDependenciesInjection mostrando a configuração do módulo Koin}
+	\label{fig:koin_dependencies}
+	\legend{Fonte: Próprio Autor}
+\end{figure}
+A inicialização do Koin ocorre em \texttt{SheSafeApplication.onCreate()}, onde o método \texttt{startKoin{}} configura o contexto Android e carrega o módulo de dependências. Esta configuração centralizada facilita manutenção e permite substituição de implementações para testes através de configuração de módulos alternativos.
+
+\section{Funcionalidades Implementadas}
+\subsection{Autenticação com Google Sign-In}
+A aplicação implementa autenticação de usuários através do Google Sign-In, utilizando a biblioteca KMPAuth que fornece componentes Compose para integração com Firebase Authentication. A tela de login, implementada através do componente \texttt{SignInArea}, apresenta botão estilizado do Google que, ao ser clicado, inicia o fluxo de autenticação OAuth.
+
+O resultado da autenticação é processado através de callback que recebe \texttt{Result<FirebaseUser?>}, permitindo tratamento apropriado de sucesso (navegação para tela principal) ou falha (exibição de mensagem de erro). Uma vez autenticado, o email do usuário é utilizado como identificador para organização de dados no Firestore, garantindo isolamento entre diferentes usuários.
+
+A classe \texttt{AuthViewModel} gerencia o estado de autenticação, determinando qual deve ser a tela inicial da aplicação baseado em se há usuário autenticado. Esta verificação é implementada no método \texttt{isUserLoggedIn()} do \texttt{AuthUseCase}, que consulta \texttt{FirebaseAuth.currentUser} para determinar status de autenticação.
+
+\subsection{Gerenciamento de Contatos Seguros}
+A funcionalidade de gerenciamento de contatos seguros permite que usuários cadastrem, visualizem, editem e removam contatos que receberão alertas de emergência. A tela de listagem de contatos (\texttt{SecureContactsScreen}) apresenta lista de contatos cadastrados com opções de edição e remoção para cada item.
+
+O cadastro de novos contatos é realizado através da tela \texttt{RegisterSecureContactScreen}, que apresenta formulário com campos para nome e número de telefone. A validação de dados garante que campos obrigatórios sejam preenchidos antes de permitir salvamento. A atualização de contatos existentes utiliza a mesma tela, pré-populando campos com dados atuais e alterando comportamento do botão de salvamento para executar operação de atualização ao invés de criação.
+
+O \texttt{SecureContactViewModel} coordena operações relacionadas a contatos, mantendo estado da lista de contatos em \texttt{StateFlow} e expondo métodos para operações CRUD. Quando usuário solicita salvamento de contato, o ViewModel invoca caso de uso apropriado (\texttt{registerSecureContact} ou \texttt{updateSecureContact}), que por sua vez interage com repositório para persistir dados no Firestore.
+
+\subsection{Envio de Pedidos de Ajuda}
+A funcionalidade central da aplicação permite que usuários enviem pedidos de ajuda com geolocalização atual para todos os contatos seguros cadastrados. O botão de envio de ajuda, proeminentemente posicionado na tela principal (\texttt{HomeScreen}), ao ser pressionado, verifica primeiro se há contatos seguros cadastrados.
+
+Caso não existam contatos cadastrados, diálogo é exibido oferecendo navegação direta para tela de cadastro de contato. Se contatos existem e configuração de confirmação está habilitada, diálogo de confirmação é apresentado antes de enviar pedido. Esta lógica é implementada na classe \texttt{ScreenAction} através do método \texttt{chooseDialogModel()}, que retorna modelo de diálogo apropriado baseado em estado da aplicação.
+
+Ao confirmar envio, aplicação coleta localização atual do usuário através de APIs de geolocalização do Android, cria objeto \texttt{HelpRequest} contendo número de telefone do contato, coordenadas de localização e timestamp, e persiste este registro no Firestore. Simultaneamente, mensagem SMS é enviada para cada contato seguro contendo texto customizável pelo usuário e link do Google Maps apontando para localização exata.
+
+O \texttt{HomeViewModel} orquestra este processo complexo, coordenando solicitação de permissões de localização e SMS (gerenciadas através do Accompanist Permissions), coleta de localização atual, formatação de mensagens, e invocação de casos de uso para persistência de dados e envio de mensagens.
+
+\subsection{Visualização de Histórico de Pedidos}
+A tela de histórico de pedidos (\texttt{HelpRequestsScreen}) apresenta lista cronológica de todos os pedidos de ajuda enviados pelo usuário, incluindo destinatário, localização e timestamp. Cada item da lista é renderizado através do componente \texttt{LastSentCard}, que exibe link clicável para visualização da localização no Google Maps.
+
+O \texttt{HelpRequestViewModel} carrega lista de pedidos do repositório ao ser inicializado, expondo dados através de \texttt{StateFlow} observado pela interface. A tela implementa pull-to-refresh para permitir que usuário atualize manualmente lista de pedidos, invocando novamente caso de uso de busca.
+
+\subsection{Configurações e Personalização}
+A tela de configurações permite que usuários personalizem comportamento da aplicação, incluindo mensagem padrão enviada em pedidos de ajuda e opção de desabilitar diálogo de confirmação antes de enviar pedidos. O \texttt{SettingsViewModel} gerencia estado destas configurações, persistindo preferências no Firestore através do \texttt{SettingsRepository}.
+
+A mensagem padrão é apresentada em campo de texto editável, com botão de salvamento que persiste alterações. A opção de confirmação é controlada através de switch que, ao ser alterado, atualiza imediatamente preferência no backend. Esta persistência em nuvem garante que configurações sejam mantidas mesmo se usuário trocar de dispositivo, desde que autentique com mesma conta Google.
+
+
 \section{Avaliação com usuário}
 A avaliação com usuário constitui-se como um paradigma metodológico fundamental no campo da Interação Humano-Computador (IHC), caracterizado pela participação direta de usuários reais no processo de análise e validação de sistemas interativos \cite{dix2003human}. Esta abordagem fundamenta-se no princípio de que a qualidade de um sistema deve ser mensurada a partir da perspectiva de quem efetivamente o utiliza, considerando suas necessidades, expectativas, limitações cognitivas e contextos de uso específicos \cite{preece2015interaction}.
 
 Diferentemente dos métodos de inspeção realizados por especialistas, a avaliação com usuário oferece insights diretos sobre a experiência real de interação, revelando aspectos que podem não ser identificados através de análises teóricas ou heurísticas \cite{nielsen1994usability}. Esta metodologia permite a observação de comportamentos autênticos, identificação de estratégias de uso não previstas pelos designers, e compreensão das dificuldades reais enfrentadas pelos usuários em contextos naturais de utilização.
-
 \subsection{Avaliação do usuário SheSafe}
+
 As avaliações com usuário da aplicação SheSafe foram conduzidas entre os dias 24 e 28 de setembro de 2025, envolvendo participantes que executaram três tarefas específicas relacionadas às funcionalidades principais do sistema. Os testes foram realizados com a versão debug da aplicação Android, disponibilizada através de um link de download compartilhado.
 
 Em relação ao cumprimento dos objetivos das tarefas, os resultados demonstraram 100\% de taxa de sucesso, com todas as participantes conseguindo completar as três atividades propostas: enviar um pedido de socorro pela primeira vez, cadastrar um novo contato seguro e alterar a mensagem padrão do pedido de ajuda. Não foram registrados erros durante a execução de nenhuma das tarefas, indicando que a interface apresenta boa intuitividade e que os fluxos de interação estão adequadamente projetados para facilitar a conclusão das ações pelos usuários.
@@ -78,4 +190,4 @@ No que se refere às impressões qualitativas, as avaliadoras expressaram percep
 
 Contudo, emergiu um padrão consistente de feedback relacionado à ausência de confirmações explícitas do sistema após a execução de determinadas ações. Algumas das avaliadoras relataram especificamente a "falta de um retorno ao cadastrar o contato", enquanto uma outra observou que "ao alterar mensagem, só vi que alterou quando mudou na tela". Este feedback indica uma oportunidade de melhoria significativa no design de interação, particularmente na implementação de feedback imediato e explícito para ações críticas do usuário.
 
-A convergência deste feedback específico sobre a ausência de confirmações do sistema sugere que esta deficiência pode impactar negativamente a confiança do usuário na aplicação, especialmente em um contexto de uso onde a certeza sobre a execução correta das ações é fundamental para a eficácia do sistema de segurança. A implementação de mensagens de confirmação, notificações toast, ou outros elementos de feedback visual imediato deveria ser considerada como prioridade para futuras iterações do desenvolvimento, visando aumentar a transparência do sistema e a confiança do usuário nas operações realizadas.L
+A convergência deste feedback específico sobre a ausência de confirmações do sistema sugere que esta deficiência pode impactar negativamente a confiança do usuário na aplicação, especialmente em um contexto de uso onde a certeza sobre a execução correta das ações é fundamental para a eficácia do sistema de segurança. A implementação de mensagens de confirmação, notificações toast, ou outros elementos de feedback visual imediato deveria ser considerada como prioridade para futuras iterações do desenvolvimento, visando aumentar a transparência do sistema e a confiança do usuário nas operações realizadas.
