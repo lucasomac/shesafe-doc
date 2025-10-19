@@ -139,8 +139,15 @@ Desenvolvimento de Sistemas para Dispositivos Móveis}               % pacote ab
 % resumo em português
 \begin{resumo}
  \noindent
-%Insira o resumo aqui
-A violência de gênero constitui uma grave problemática social no Brasil, com dados oficiais registrando 1.450 casos de feminicídio em 2024 e mais de 87 mil casos de estupro no mesmo período. A população LGBTQIAPN+ também enfrenta índices alarmantes de violência, com 291 mortes registradas em 2024, representando um aumento de 13,2\% em relação ao ano anterior. Diante deste cenário, evidencia-se a necessidade de desenvolvimento de soluções tecnológicas que possam oferecer proteção e mecanismos de socorro para pessoas em situação de vulnerabilidade e risco iminente.
+ A violência de gênero constitui uma problemática social grave que demanda soluções tecnológicas capazes de oferecer proteção e mecanismos de socorro para pessoas em situação de vulnerabilidade. Este trabalho apresenta o desenvolvimento de uma aplicação móvel para dispositivos Android destinada a auxiliar mulheres e pessoas LGBTQIAPN+ em situações de risco através de recursos de geolocalização e comunicação emergencial.
+ 
+ A aplicação SheSafe foi concebida como ferramenta tecnológica de proteção que permite o envio automatizado de pedidos de socorro contendo a localização do usuário para contatos previamente cadastrados. O desenvolvimento seguiu princípios consolidados de engenharia de software, adotando a arquitetura limpa para organização do código em camadas independentes e o padrão MVVM para separação entre lógica de apresentação e interface de usuário. A interface foi implementada utilizando Jetpack Compose, toolkit moderno de construção declarativa de interfaces para Android, com preparação para expansão multiplataforma através do Compose Multiplatform.
+ 
+ A arquitetura da aplicação organiza-se em camadas que compreendem o domínio, contendo entidades e regras de negócio; os dados, responsáveis pela abstração de acesso às informações; o framework, implementando integrações com tecnologias específicas; e a apresentação, gerenciando a interface e interações do usuário. Para o backend, foi utilizado o Firebase como solução de backend-as-a-service, incluindo Firebase Authentication para gerenciamento de identidade via Google Sign-In e Firebase Firestore como banco de dados NoSQL em tempo real. A injeção de dependências foi gerenciada através do framework Koin, facilitando testabilidade e manutenibilidade do código.
+\begin{comment}
+	Objetivo: Desenvolver uma aplicação móvel denominada "SheSafe" para envio automatizado de pedidos de socorro com coordenadas de geolocalização em tempo real, direcionada prioritariamente a mulheres vítimas de violência doméstica e de gênero, mas extensível a todas as pessoas em situação de vulnerabilidade, incluindo a população LGBTQIAPN+.
+\end{comment}
+
 
  \vspace{\onelineskip}
 
@@ -153,7 +160,11 @@ A violência de gênero constitui uma grave problemática social no Brasil, com 
  \begin{otherlanguage*}{english}
    \noindent
 %   % Insira o abstract aqui
-Gender-based violence represents a severe social problem in Brazil, with official data recording 1,450 femicide cases in 2024 and over 87,000 rape cases in the same period. The LGBTQIAPN+ population also faces alarming violence rates, with 291 deaths registered in 2024, representing a 13.2\% increase compared to the previous year. Given this scenario, there is an evident need to develop technological solutions that can offer protection and emergency mechanisms for people in vulnerable situations and imminent risk.
+Gender-based violence constitutes a serious social problem that demands technological solutions capable of offering protection and assistance mechanisms to people in vulnerable situations. This work presents the development of a mobile application for Android devices designed to assist women and LGBTQIAPN+ people in risky situations through geolocation and emergency communication capabilities.
+
+The SheSafe application was designed as a technological protection tool that allows the automated sending of distress calls containing the user's location to previously registered contacts. The development followed established software engineering principles, adopting a clean architecture for organizing code into independent layers and the MVVM pattern for separating presentation logic and user interface. The interface was implemented using Jetpack Compose, a modern toolkit for declarative interface construction for Android, with preparation for cross-platform expansion through Compose Multiplatform.
+
+The application architecture is organized into layers comprising the domain, containing entities and business rules; the data, responsible for abstracting access to information; the framework, implementing integrations with specific technologies; and presentation, managing the interface and user interactions. For the backend, Firebase was used as a backend-as-a-service solution, including Firebase Authentication for identity management via Google Sign-In and Firebase Firestore as a real-time NoSQL database. Dependency injection was managed through the Koin framework, facilitating testability and maintainability.
 
    \vspace{\onelineskip}
 
