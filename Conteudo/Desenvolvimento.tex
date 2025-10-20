@@ -145,6 +145,41 @@ Ao confirmar envio, aplicação coleta localização atual do usuário através 
 
 O \texttt{HomeViewModel} orquestra este processo complexo, coordenando solicitação de permissões de localização e SMS (gerenciadas através do Accompanist Permissions), coleta de localização atual, formatação de mensagens, e invocação de casos de uso para persistência de dados e envio de mensagens.
 
+Foram utilizadas duas apis para o envio do sms: InfoBip\footnote{https://www.infobip.com/} api utilizada como opção principal para envio de SMS de emergência. A implementação está em \texttt{InfoBipRepositoryImpl}. E a API SMS Dev\footnote{https://www.smsdev.com.br/}, foi utilizada como um possível fallback.
+
+\begin{comment}
+\begin{lstlisting}[caption={Integração com APIs de SMS},label={lst:sms-api}]
+class InfoBipRepositoryImpl(
+private val service: InfoBipService
+) : InfoBipRepository {
+	
+	override suspend fun sendSMS(
+	phoneNumbers: List<String>,
+	message: String
+	): SheSafeResult<InfoBipEntity> {
+		return try {
+			val request = InfoBipRequest(
+			messages = phoneNumbers.map { phone ->
+				InfoBipRequest.Message(
+				content = InfoBipRequest.Message.Content(message),
+				destinations = listOf(
+				InfoBipRequest.Message.Destination(phone)
+				),
+				sender = "SheSafe"
+				)
+			}
+			)
+			
+			val response = service.sendSMS(request)
+			SheSafeResult.Success(response.toEntity())
+		} catch (e: Exception) {
+			SheSafeResult.Error(e.message ?: "Erro ao enviar SMS")
+		}
+	}
+}
+\end{lstlisting}
+\end{comment}
+
 \subsection{Visualização de Histórico de Pedidos}
 A tela de histórico de pedidos (\texttt{HelpRequestsScreen}) apresenta lista cronológica de todos os pedidos de ajuda enviados pelo usuário, incluindo destinatário, localização e timestamp. Cada item da lista é renderizado através do componente \texttt{LastSentCard}, que exibe link clicável para visualização da localização no Google Maps.
 

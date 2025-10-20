@@ -1,0 +1,1149 @@
+\chapter{Desenvolvimento da Aplicação}
+
+\section{Introdução}
+
+O desenvolvimento da aplicação SheSafe foi conduzido seguindo princípios modernos de engenharia de software, com ênfase especial em arquitetura limpa, padrões de projeto consolidados e tecnologias de ponta do ecossistema Android. Este capítulo apresenta os aspectos técnicos da implementação, destacando as decisões arquiteturais e as práticas adotadas durante o desenvolvimento.
+
+\section{Arquitetura do Projeto}
+
+\subsection{Visão Geral da Arquitetura Limpa}
+
+A aplicação foi desenvolvida utilizando os princípios da Clean Architecture (Arquitetura Limpa), proposta por Robert C. Martin \cite{martin2017clean}. Esta abordagem arquitetural organiza o código em camadas concêntricas, onde cada camada possui responsabilidades bem definidas e dependências unidirecionais, sempre apontando para o centro da arquitetura.
+
+A estrutura implementada no SheSafe segue a seguinte organização de camadas:
+
+\begin{itemize}
+	\item \textbf{Domain (Domínio):} Camada central contendo as entidades de negócio, casos de uso e interfaces de repositório
+	\item \textbf{Data (Dados):} Camada responsável pela implementação dos repositórios e modelos de dados
+	\item \textbf{Framework:} Camada externa que contém as implementações específicas de plataforma e serviços
+	\item \textbf{Presentation (Apresentação):} Camada de interface do usuário, implementada com Jetpack Compose
+\end{itemize}
+
+\begin{figure}[htbp]
+	\centering
+	% \includegraphics[width=0.8\textwidth]{figuras/arquitetura_limpa_shesafe.png}
+	\caption{Diagrama da Arquitetura Limpa do SheSafe}
+	\label{fig:arquitetura_limpa}
+\end{figure}
+
+\textit{Nota: Inserir captura de tela do diagrama da arquitetura limpa aplicada ao projeto.}
+
+\subsection{Estrutura de Diretórios}
+
+O projeto está organizado em uma estrutura modular que reflete claramente a separação de responsabilidades proposta pela arquitetura limpa. A estrutura principal divide-se em dois módulos: \texttt{androidApp} e \texttt{shared}.
+
+\begin{figure}[htbp]
+	\centering
+	% \includegraphics[width=0.6\textwidth]{figuras/estrutura_androidapp.png}
+	\caption{Estrutura de pastas do módulo androidApp}
+	\label{fig:estrutura_androidapp}
+	\fonte{Disponível em: \url{https://github.com/lucasomac/SheSafe/tree/main/androidApp/src/main/java/br/com/lucolimac/shesafe/android}}
+\end{figure}
+
+\textit{Nota: Inserir captura de tela da estrutura de pastas do módulo androidApp no repositório GitHub.}
+
+O módulo \texttt{androidApp} contém toda a implementação específica da plataforma Android, organizada nos seguintes pacotes:
+
+\begin{itemize}
+	\item \texttt{data/}: Implementações de repositórios e modelos de dados
+	\item \texttt{domain/}: Entidades, casos de uso e interfaces de repositório
+	\item \texttt{framework/}: Serviços, injeção de dependências e integrações específicas
+	\item \texttt{presentation/}: ViewModels, componentes de UI e navegação
+\end{itemize}
+
+\begin{figure}[htbp]
+	\centering
+	% \includegraphics[width=0.6\textwidth]{figuras/estrutura_domain.png}
+	\caption{Estrutura detalhada da camada de domínio}
+	\label{fig:estrutura_domain}
+	\fonte{Disponível em: \url{https://github.com/lucasomac/SheSafe/tree/main/androidApp/src/main/java/br/com/lucolimac/shesafe/android/domain}}
+\end{figure}
+
+\textit{Nota: Inserir captura de tela da estrutura da pasta domain mostrando os subpacotes entity, repository e usecase.}
+
+\section{Camada de Domínio}
+
+A camada de domínio representa o núcleo da aplicação, contendo a lógica de negócio pura, independente de frameworks ou tecnologias específicas. Esta independência garante que as regras de negócio possam ser testadas isoladamente e reutilizadas em diferentes contextos.
+
+\subsection{Entidades}
+
+As entidades representam os objetos de negócio fundamentais da aplicação. O SheSafe define entidades principais como \texttt{SecureContact}, \texttt{HelpRequest} e entidades auxiliares para integração com serviços externos.
+
+\begin{lstlisting}[language=Kotlin, caption={Entidade SecureContact}, label={lst:secure_contact}]
+	@Parcelize
+	data class SecureContact(
+	val name: String, 
+	val phoneNumber: String
+	) : Parcelable {
+		constructor() : this("", "")
+	}
+\end{lstlisting}
+
+A entidade \texttt{HelpRequest} encapsula informações críticas sobre solicitações de ajuda, incluindo lista de números de telefone para contato, localização geográfica e timestamp da criação:
+
+\begin{lstlisting}[language=Kotlin, caption={Entidade HelpRequest}, label={lst:help_request}]
+	data class HelpRequest(
+	val phoneNumbers: List<String>, 
+	val location: GeoPoint, 
+	val createdAt: Timestamp
+	) {
+		val linkMap = "https://www.google.com/maps/search/?api=1" +
+		"&query=${location.latitude},${location.longitude}"
+	}
+\end{lstlisting}
+
+\subsection{Casos de Uso}
+
+Os casos de uso encapsulam a lógica de negócio específica da aplicação, representando as operações que o sistema pode executar. Cada caso de uso é implementado seguindo o princípio da responsabilidade única (Single Responsibility Principle).
+
+\begin{figure}[htbp]
+	\centering
+	% \includegraphics[width=0.6\textwidth]{figuras/estrutura_usecase.png}
+	\caption{Estrutura de casos de uso}
+	\label{fig:estrutura_usecase}
+	\fonte{Disponível em: \url{https://github.com/lucasomac/SheSafe/tree/main/androidApp/src/main/java/br/com/lucolimac/shesafe/android/domain/usecase}}
+\end{figure}
+
+\textit{Nota: Inserir captura de tela da pasta usecase mostrando as interfaces e implementações dos casos de uso.}
+
+O Código~\ref{lst:usecase_impl} ilustra a implementação de um caso de uso para gerenciamento de contatos seguros:
+
+\begin{lstlisting}[language=Kotlin, caption={Implementação de Caso de Uso}, label={lst:usecase_impl}]
+	class SecureContactUseCaseImpl(
+	private val secureContactRepository: SecureContactRepository
+	) : SecureContactUseCase {
+		private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
+		
+		override fun getSecureContacts(): Flow<List<SecureContact>> {
+			return flow {
+				emit(secureContactRepository.getSecureContactList())
+			}.flowOn(coroutineDispatcher)
+		}
+		
+		override fun registerSecureContact(
+		contact: SecureContact
+		): Flow<Boolean> {
+			return flow {
+				emit(secureContactRepository.registerSecureContact(contact))
+			}.flowOn(coroutineDispatcher)
+		}
+		
+		override fun deleteSecureContact(
+		phoneNumber: String
+		): Flow<Boolean> {
+			return flow {
+				emit(secureContactRepository.deleteSecureContact(phoneNumber))
+			}.flowOn(coroutineDispatcher)
+		}
+	}
+\end{lstlisting}
+
+A utilização de \texttt{Flow} do Kotlin Coroutines permite operações assíncronas reativas, enquanto o \texttt{Dispatchers.IO} garante que operações de entrada/saída sejam executadas em threads apropriadas, evitando bloqueio da thread principal.
+
+\subsection{Interfaces de Repositório}
+
+As interfaces de repositório definem contratos para acesso a dados, sem especificar detalhes de implementação. Esta abstração permite que a camada de domínio permaneça independente de fontes de dados específicas, facilitando testes e manutenção.
+
+\begin{lstlisting}[language=Kotlin, caption={Interface de Repositório}, label={lst:repository_interface}]
+	interface SecureContactRepository {
+		suspend fun registerSecureContact(
+		secureContact: SecureContact
+		): Boolean
+		suspend fun getSecureContactList(): List<SecureContact>
+		suspend fun getContactByPhoneNumber(
+		phoneNumber: String
+		): SecureContact?
+		suspend fun updateSecureContact(
+		phoneNumber: String, 
+		secureContact: SecureContact
+		): Boolean
+		suspend fun deleteSecureContact(phoneNumber: String): Boolean
+	}
+\end{lstlisting}
+
+\section{Camada de Dados}
+
+A camada de dados implementa as interfaces definidas na camada de domínio, fornecendo acesso concreto a diferentes fontes de dados, incluindo Firebase Firestore, APIs REST e serviços de autenticação.
+
+\subsection{Modelos de Dados}
+
+Os modelos de dados são estruturas que representam informações conforme armazenadas em fontes externas, contendo anotações específicas para serialização e deserialização. A conversão entre modelos de dados e entidades de domínio é realizada através de métodos auxiliares.
+
+\begin{lstlisting}[language=Kotlin, caption={Modelo de Dados}, label={lst:data_model}]
+	data class SecureContactModel(
+	@SerializedName("name") val name: String, 
+	@SerializedName("phoneNumber") val phoneNumber: String
+	) {
+		constructor() : this(name = "", phoneNumber = "")
+		
+		fun toEntity(): SecureContact {
+			return SecureContact(name, phoneNumber)
+		}
+		
+		companion object {
+			fun fromEntity(secureContact: SecureContact): SecureContactModel {
+				return SecureContactModel(
+				name = secureContact.name, 
+				phoneNumber = secureContact.phoneNumber
+				)
+			}
+		}
+	}
+\end{lstlisting}
+
+A separação entre modelos de dados e entidades de domínio permite que mudanças nas estruturas de dados externos não afetem a lógica de negócio, promovendo baixo acoplamento e alta coesão.
+
+\subsection{Implementação de Repositórios}
+
+Os repositórios implementam as interfaces definidas no domínio, delegando operações para fontes de dados específicas através de data sources. Esta camada adicional de abstração facilita a troca de implementações de persistência.
+
+\begin{lstlisting}[language=Kotlin, caption={Implementação de Repositório}, label={lst:repository_impl}]
+	class SecureContactRepositoryImpl(
+	private val secureContactDataSource: SecureContactDataSource
+	) : SecureContactRepository {
+		
+		override suspend fun registerSecureContact(
+		secureContact: SecureContact
+		): Boolean {
+			return secureContactDataSource.registerSecureContact(
+			SecureContactModel.fromEntity(secureContact)
+			)
+		}
+		
+		override suspend fun getSecureContactList(): List<SecureContact> {
+			return secureContactDataSource.getSecureContacts()
+			.map { it.toEntity() }
+		}
+		
+		override suspend fun updateSecureContact(
+		phoneNumber: String,
+		secureContact: SecureContact
+		): Boolean {
+			return secureContactDataSource.updateSecureContact(
+			phoneNumber,
+			SecureContactModel.fromEntity(secureContact)
+			)
+		}
+	}
+\end{lstlisting}
+
+\subsection{Fontes de Dados}
+
+As fontes de dados (data sources) encapsulam o acesso direto a APIs, bancos de dados e serviços externos. O SheSafe utiliza principalmente Firebase como backend, mas também integra APIs REST para envio de mensagens SMS através de serviços como InfoBip e SmsDev.
+
+\begin{figure}[htbp]
+	\centering
+	% \includegraphics[width=0.6\textwidth]{figuras/estrutura_datasource.png}
+	\caption{Estrutura de fontes de dados}
+	\label{fig:estrutura_datasource}
+	\fonte{Disponível em: \url{https://github.com/lucasomac/SheSafe/tree/main/androidApp/src/main/java/br/com/lucolimac/shesafe/android/data/source}}
+\end{figure}
+
+\textit{Nota: Inserir captura de tela da pasta data/source mostrando as interfaces e o subpacote api.}
+
+\section{Camada de Framework}
+
+A camada de framework contém implementações específicas da plataforma Android, incluindo serviços, configurações de rede e injeção de dependências. Esta camada isola detalhes técnicos da plataforma das camadas superiores.
+
+\subsection{Serviços Firebase}
+
+Os serviços Firebase implementam as interfaces de data source, fornecendo acesso ao Firestore e Authentication. O Código~\ref{lst:firebase_service} demonstra a implementação do serviço de contatos seguros:
+
+\begin{lstlisting}[language=Kotlin, caption={Serviço Firebase}, label={lst:firebase_service}]
+	class SecureContactFirebaseService(
+	private val firestore: FirebaseFirestore,
+	private val firebaseAuth: FirebaseAuth
+	) : SecureContactService {
+		
+		private fun getContactsCollection(): CollectionReference? {
+			val userEmail = firebaseAuth.currentUser?.email
+			return if (userEmail.isNullOrBlank()) {
+				null
+			} else {
+				firestore.collection("secureContacts")
+				.document(userEmail)
+				.collection("contacts")
+			}
+		}
+		
+		override suspend fun getSecureContacts(): 
+		List<SecureContactModel> {
+			val collection = getContactsCollection() 
+			?: return emptyList()
+			return try {
+				val querySnapshot = collection.get().await()
+				querySnapshot.documents.mapNotNull { document ->
+					document.toObject(SecureContactModel::class.java)
+				}
+			} catch (e: Exception) {
+				e.printStackTrace()
+				emptyList()
+			}
+		}
+		
+		override suspend fun registerSecureContact(
+		contact: SecureContactModel
+		): Boolean {
+			val collection = getContactsCollection() ?: return false
+			return try {
+				collection.document(contact.phoneNumber)
+				.set(contact)
+				.await()
+				true
+			} catch (e: Exception) {
+				e.printStackTrace()
+				false
+			}
+		}
+	}
+\end{lstlisting}
+
+\subsection{Injeção de Dependências com Koin}
+
+O projeto utiliza Koin \cite{koin2024} para injeção de dependências, promovendo baixo acoplamento e facilitando testes unitários. A configuração está centralizada no objeto \texttt{SheSafeDependenciesInjection}, conforme apresentado no Código~\ref{lst:koin_config}:
+
+\begin{lstlisting}[language=Kotlin, caption={Configuração de Injeção de Dependências}, label={lst:koin_config}]
+	object SheSafeDependenciesInjection {
+		val sheSafeModule = module {
+			// Provedores Firebase
+			factory<FirebaseAuth> { 
+				FirebaseProvider.auth 
+			}
+			factory<FirebaseFirestore> { 
+				FirebaseProvider.firestore 
+			}
+			
+			// Serviços
+			factoryOf(::SecureContactFirebaseService) {
+				bind<SecureContactService>()
+			}
+			factoryOf(::HelpRequestFirebaseService) {
+				bind<HelpRequestService>()
+			}
+			factoryOf(::AuthFirebaseService) {
+				bind<AuthService>()
+			}
+			
+			// Data Sources
+			factoryOf(::SecureSecureContactDataSourceImpl) {
+				bind<SecureContactDataSource>()
+			}
+			factoryOf(::HelpRequestDataSourceImpl) {
+				bind<HelpRequestDataSource>()
+			}
+			
+			// Repositórios
+			factoryOf(::SecureContactRepositoryImpl) {
+				bind<SecureContactRepository>()
+			}
+			factoryOf(::HelpRequestRepositoryImpl) {
+				bind<HelpRequestRepository>()
+			}
+			
+			// Casos de Uso
+			factoryOf(::SecureContactUseCaseImpl) {
+				bind<SecureContactUseCase>()
+			}
+			factoryOf(::HelpRequestUseCaseImpl) {
+				bind<HelpRequestUseCase>()
+			}
+			
+			// ViewModels
+			viewModelOf(::SecureContactViewModel)
+			viewModelOf(::HelpRequestViewModel)
+			viewModelOf(::HomeViewModel)
+			viewModelOf(::ProfileViewModel)
+			
+			// Configuração de rede
+			factory { provideOkHttpClient() }
+			factory<Retrofit> { 
+				provideRetrofit(get(), Api.INFO_BIP) 
+			}
+		}
+	}
+\end{lstlisting}
+
+\subsection{Integração com APIs REST}
+
+Para funcionalidades que requerem comunicação com APIs externas, como envio de SMS, o projeto utiliza Retrofit \cite{retrofit2024}, uma biblioteca type-safe para requisições HTTP. O Código~\ref{lst:retrofit_config} apresenta a configuração:
+
+\begin{lstlisting}[language=Kotlin, caption={Configuração Retrofit}, label={lst:retrofit_config}]
+	object SmsDevApi {
+		private const val OK_HTTP_TAG_LOG = "SMS-DEV-LOG"
+		
+		fun provideOkHttpClient(): OkHttpClient {
+			val httpLoggingInterceptor = 
+			HttpLoggingInterceptor { Log.i(OK_HTTP_TAG_LOG, it) }
+			.apply {
+				level = HttpLoggingInterceptor.Level.BODY
+			}
+			return OkHttpClient.Builder()
+			.addInterceptor(httpLoggingInterceptor)
+			.build()
+		}
+		
+		fun provideRetrofitInfoBip(
+		okHttpClient: OkHttpClient
+		): Retrofit {
+			return Retrofit.Builder()
+			.baseUrl(INFO_BIP_HOST)
+			.client(okHttpClient)
+			.addConverterFactory(GsonConverterFactory.create())
+			.build()
+		}
+		
+		fun provideRetrofit(
+		okHttpClient: OkHttpClient, 
+		api: Api
+		): Retrofit {
+			return when (api) {
+				Api.SMS_DEV -> provideRetrofitSmsDev(okHttpClient)
+				Api.INFO_BIP -> provideRetrofitInfoBip(okHttpClient)
+			}
+		}
+	}
+\end{lstlisting}
+
+\section{Padrão MVVM na Camada de Apresentação}
+
+A camada de apresentação implementa o padrão Model-View-ViewModel (MVVM), separando claramente a lógica de apresentação da interface do usuário. Este padrão promove testabilidade e manutenibilidade do código de UI.
+
+\subsection{ViewModels}
+
+Os ViewModels gerenciam o estado da UI e orquestram a comunicação entre a camada de apresentação e os casos de uso. O Código~\ref{lst:viewmodel} demonstra a implementação de um ViewModel:
+
+\begin{lstlisting}[language=Kotlin, caption={ViewModel de Contatos Seguros}, label={lst:viewmodel}]
+	class SecureContactViewModel(
+	private val secureContactUseCase: SecureContactUseCase
+	) : ViewModel() {
+		
+		private val _secureContacts = 
+		MutableStateFlow<List<SecureContact>>(emptyList())
+		val secureContacts: StateFlow<List<SecureContact>> = 
+		_secureContacts.asStateFlow()
+		
+		private val _isLoading = MutableStateFlow(false)
+		val isLoading: StateFlow<Boolean> = 
+		_isLoading.asStateFlow()
+		
+		private val _errorMessage = MutableStateFlow<String?>(null)
+		val errorMessage: StateFlow<String?> = 
+		_errorMessage.asStateFlow()
+		
+		fun loadSecureContacts() {
+			viewModelScope.launch {
+				_isLoading.value = true
+				secureContactUseCase.getSecureContacts()
+				.catch { e ->
+					_errorMessage.value = e.message
+					_isLoading.value = false
+				}
+				.collect { contacts ->
+					_secureContacts.value = contacts
+					_isLoading.value = false
+				}
+			}
+		}
+		
+		fun registerContact(contact: SecureContact) {
+			viewModelScope.launch {
+				secureContactUseCase.registerSecureContact(contact)
+				.collect { success ->
+					if (success) {
+						loadSecureContacts()
+					} else {
+						_errorMessage.value = 
+						"Erro ao registrar contato"
+					}
+				}
+			}
+		}
+		
+		fun deleteContact(phoneNumber: String) {
+			viewModelScope.launch {
+				secureContactUseCase.deleteSecureContact(phoneNumber)
+				.collect { success ->
+					if (success) loadSecureContacts()
+				}
+			}
+		}
+	}
+\end{lstlisting}
+
+A utilização de \texttt{StateFlow} permite que a UI observe mudanças de estado de forma reativa, atualizando-se automaticamente quando necessário, seguindo o paradigma de programação reativa.
+
+\section{Jetpack Compose e Interface do Usuário}
+
+O SheSafe utiliza Jetpack Compose \cite{compose2024}, toolkit moderno para construção de interfaces declarativas no Android, que simplifica significativamente o desenvolvimento de UI comparado ao sistema tradicional baseado em XML.
+
+\subsection{Composables}
+
+As telas são implementadas como funções composable que descrevem a UI de forma declarativa. O Código~\ref{lst:composable_screen} apresenta um exemplo:
+
+\begin{lstlisting}[language=Kotlin, caption={Tela de Contatos Seguros}, label={lst:composable_screen}]
+	@Composable
+	fun SecureContactsScreen(
+	viewModel: SecureContactViewModel,
+	onNavigateToRegister: () -> Unit,
+	onNavigateToEdit: (String) -> Unit
+	) {
+		val contacts by viewModel.secureContacts.collectAsState()
+		val isLoading by viewModel.isLoading.collectAsState()
+		val errorMessage by viewModel.errorMessage.collectAsState()
+		
+		LaunchedEffect(Unit) {
+			viewModel.loadSecureContacts()
+		}
+		
+		Scaffold(
+		floatingActionButton = {
+			FloatingActionButton(
+			onClick = onNavigateToRegister,
+			containerColor = MaterialTheme.colorScheme.primary
+			) {
+				Icon(
+				Icons.Filled.Add, 
+				contentDescription = "Adicionar contato"
+				)
+			}
+		}
+		) { padding ->
+			Box(modifier = Modifier.padding(padding)) {
+				when {
+					isLoading -> {
+						CircularProgressIndicator(
+						modifier = Modifier.align(Alignment.Center)
+						)
+					}
+					errorMessage != null -> {
+						ErrorMessage(
+						message = errorMessage!!,
+						onRetry = { viewModel.loadSecureContacts() }
+						)
+					}
+					contacts.isEmpty() -> {
+						EmptyStateMessage(
+						message = "Nenhum contato cadastrado"
+						)
+					}
+					else -> {
+						ContactList(
+						contacts = contacts,
+						onContactClick = { contact ->
+							onNavigateToEdit(contact.phoneNumber)
+						},
+						onDeleteClick = { contact ->
+							viewModel.deleteContact(contact.phoneNumber)
+						}
+						)
+					}
+				}
+			}
+		}
+	}
+	
+	@Composable
+	private fun ContactList(
+	contacts: List<SecureContact>,
+	onContactClick: (SecureContact) -> Unit,
+	onDeleteClick: (SecureContact) -> Unit
+	) {
+		LazyColumn {
+			items(contacts) { contact ->
+				SecureContactItem(
+				contact = contact,
+				onClick = { onContactClick(contact) },
+				onDeleteClick = { onDeleteClick(contact) }
+				)
+				Divider()
+			}
+		}
+	}
+\end{lstlisting}
+
+\subsection{Navegação}
+
+A navegação é gerenciada pelo Navigation Compose, que permite definir o fluxo da aplicação de forma declarativa. O Código~\ref{lst:navigation} demonstra a configuração do grafo de navegação:
+
+\begin{lstlisting}[language=Kotlin, caption={Configuração de Navegação}, label={lst:navigation}]
+	@Composable
+	fun SheSafeNavHost(
+	navController: NavHostController,
+	startDestination: String,
+	profileViewModel: ProfileViewModel,
+	homeViewModel: HomeViewModel,
+	secureContactViewModel: SecureContactViewModel,
+	authViewModel: AuthViewModel,
+	helpRequestViewModel: HelpRequestViewModel,
+	settingsViewModel: SettingsViewModel,
+	registerSecureContactViewModel: RegisterSecureContactViewModel,
+	modifier: Modifier = Modifier
+	) {
+		NavHost(
+		navController = navController,
+		startDestination = startDestination,
+		modifier = modifier
+		) {
+			composable(HOME_ROUTE) {
+				HomeScreen(
+				viewModel = homeViewModel,
+				onNavigateToHelpRequests = {
+					navController.navigate(HELP_REQUESTS_ROUTE)
+				},
+				onSendHelpRequest = {
+					// Lógica de envio de pedido de ajuda
+				}
+				)
+			}
+			
+			composable(SECURE_CONTACTS_ROUTE) {
+				SecureContactsScreen(
+				viewModel = secureContactViewModel,
+				onNavigateToRegister = {
+					navController.navigateToRegisterSecureContact()
+				},
+				onNavigateToEdit = { phoneNumber ->
+					navController.navigateToRegisterSecureContact(
+					phoneNumber
+					)
+				}
+				)
+			}
+			
+			composable(PROFILE_ROUTE) {
+				ProfileScreen(
+				viewModel = profileViewModel,
+				onLogout = {
+					authViewModel.logout()
+					navController.navigate(LOGIN_ROUTE) {
+						popUpTo(0) { inclusive = true }
+					}
+				}
+				)
+			}
+			
+			composable(
+			route = "$BASE_SECURE_CONTACT_ROUTE?" +
+			"{$SECURE_CONTACT_PHONE_NUMBER_ARGUMENT}",
+			arguments = listOf(
+			navArgument(SECURE_CONTACT_PHONE_NUMBER_ARGUMENT) {
+				type = NavType.StringType
+				nullable = true
+			}
+			)
+			) { backStackEntry ->
+				val phoneNumber = backStackEntry.arguments
+				?.getString(SECURE_CONTACT_PHONE_NUMBER_ARGUMENT)
+				RegisterSecureContactScreen(
+				viewModel = registerSecureContactViewModel,
+				phoneNumber = phoneNumber,
+				onNavigateBack = { 
+					navController.popBackStack() 
+				}
+				)
+			}
+			
+			composable(HELP_REQUESTS_ROUTE) {
+				HelpRequestsScreen(
+				viewModel = helpRequestViewModel,
+				onNavigateBack = { 
+					navController.popBackStack() 
+				}
+				)
+			}
+		}
+	}
+\end{lstlisting}
+
+\section{Kotlin Multiplatform}
+
+Embora o foco atual seja a plataforma Android, o projeto está estruturado para suportar Kotlin Multiplatform (KMP) \cite{kotlinmultiplatform2024}, permitindo compartilhamento de código entre diferentes plataformas no futuro.
+
+O módulo \texttt{shared} está preparado para conter lógica de negócio e modelos de dados que podem ser reutilizados em implementações iOS, desktop ou web.
+
+\begin{figure}[htbp]
+	\centering
+	% \includegraphics[width=0.5\textwidth]{figuras/estrutura_shared.png}
+	\caption{Estrutura do módulo shared}
+	\label{fig:estrutura_shared}
+	\fonte{Disponível em: \url{https://github.com/lucasomac/SheSafe/tree/main/shared}}
+\end{figure}
+
+\textit{Nota: Inserir captura de tela da estrutura do módulo shared no repositório.}
+
+A configuração no arquivo \texttt{settings.gradle.kts} define os módulos do projeto:
+
+\begin{lstlisting}[language=Kotlin, caption={Configuração de Módulos}, label={lst:gradle_settings}]
+	enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+	
+	pluginManagement {
+		repositories {
+			google()
+			gradlePluginPortal()
+			mavenCentral()
+		}
+	}
+	
+	dependencyResolutionManagement {
+		repositories {
+			google()
+			mavenCentral()
+		}
+	}
+	
+	rootProject.name = "SheSafe"
+	include(":androidApp")
+	include(":shared")
+\end{lstlisting}
+
+\section{Gerenciamento de Permissões}
+
+O SheSafe requer permissões sensíveis para funcionar adequadamente, incluindo acesso à localização e envio de SMS. O gerenciamento de permissões é implementado de forma declarativa usando Accompanist Permissions \cite{accompanist2024}:
+
+\begin{lstlisting}[language=Kotlin, caption={Solicitação de Permissões}, label={lst:permissions}]
+	@Composable
+	fun RequestLocationPermission(
+	onPermissionGranted: () -> Unit,
+	onPermissionDenied: () -> Unit
+	) {
+		val permissionState = rememberMultiplePermissionsState(
+		permissions = listOf(
+		Manifest.permission.ACCESS_FINE_LOCATION,
+		Manifest.permission.ACCESS_COARSE_LOCATION
+		)
+		)
+		
+		LaunchedEffect(permissionState.allPermissionsGranted) {
+			if (permissionState.allPermissionsGranted) {
+				onPermissionGranted()
+			}
+		}
+		
+		if (!permissionState.allPermissionsGranted) {
+			AlertDialog(
+			onDismissRequest = onPermissionDenied,
+			title = { 
+				Text("Permissão de Localização Necessária") 
+			},
+			text = {
+				Text(
+				"O SheSafe precisa acessar sua localização " +
+				"para enviar sua posição em caso de emergência."
+				)
+			},
+			confirmButton = {
+				TextButton(
+				onClick = { 
+					permissionState
+					.launchMultiplePermissionRequest() 
+				}
+				) {
+					Text("Permitir")
+				}
+			},
+			dismissButton = {
+				TextButton(onClick = onPermissionDenied) {
+					Text("Negar")
+				}
+			}
+			)
+		}
+	}
+\end{lstlisting}
+
+\section{Configuração do Manifesto}
+
+O arquivo \texttt{AndroidManifest.xml} declara as permissões necessárias e componentes da aplicação. O Código~\ref{lst:manifest} apresenta a configuração principal:
+
+\begin{lstlisting}[language=XML, caption={Configuração do Manifesto}, label={lst:manifest}]
+	<?xml version="1.0" encoding="utf-8"?>
+	<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+	<uses-feature
+	android:name="android.hardware.telephony"
+	android:required="false" />
+	
+	<uses-permission 
+	android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission 
+	android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission 
+	android:name="android.permission.SEND_SMS" />
+	<uses-permission 
+	android:name="android.permission.FOREGROUND_SERVICE" />
+	
+	<application
+	android:name=".SheSafeApplication"
+	android:allowBackup="false"
+	android:dataExtractionRules="@xml/data_extraction_rules"
+	android:fullBackupContent="false"
+	android:icon="@mipmap/ic_launcher"
+	android:label="@string/appName"
+	android:supportsRtl="true"
+	android:theme="@style/AppTheme">
+	
+	<activity
+	android:name=".MainActivity"
+	android:exported="true">
+	<intent-filter>
+	<action android:name="android.intent.action.MAIN" />
+	<category 
+	android:name="android.intent.category.LAUNCHER" />
+	</intent-filter>
+	</activity>
+	
+	<meta-data
+	android:name="com.google.android.geo.API_KEY"
+	android:value="@string/google_maps_key" />
+	</application>
+</manifest>
+\end{lstlisting}
+\section{Tratamento de Resultados e Erros}
+O projeto implementa uma classe selada \texttt{SheSafeResult} para encapsular diferentes estados de operações, incluindo sucesso, falha com dados de erro estruturados, e erro excepcional. Esta abordagem permite um tratamento robusto e explícito de todos os cenários possíveis.
+\begin{lstlisting}[language=Kotlin, caption={Classe de Resultado}, label={lst:result_class}]
+	sealed class SheSafeResult<out S, out E> {
+		data class Success<S>(val data: S) :
+		SheSafeResult<S, Nothing>()
+		data class Failure<E>(val data: E) : 
+		SheSafeResult<Nothing, E>()
+		data class Error(val throwable: Throwable? = null) : 
+		SheSafeResult<Nothing, Nothing>()
+	}
+\end{lstlisting}
+O Código~\ref{lst:result_usage} demonstra o uso desta classe em um repositório de API:
+\begin{lstlisting}[language=Kotlin, caption={Uso de SheSafeResult}, label={lst:result_usage}]
+class InfoBipRepositoryImpl(
+private val dataSource: InfoBipDataSource
+) : InfoBipRepository {
+	override suspend fun sendSms(
+	body: InfoBipBody, 
+	authorization: String
+	): SheSafeResult<InfoBipEntity, InfoBipFailure> {
+		return try {
+			val response = dataSource.sendSms(
+			InfoBipRequest.fromEntity(body), 
+			authorization
+			)
+			
+			if (response.isSuccessful) {
+				val smsResponse: InfoBipResponse = 
+				response.body() ?: return SheSafeResult.Error()
+				SheSafeResult.Success(smsResponse.toEntity())
+			} else {
+				val responseError = response.errorBody()?.string()
+				val error = Gson().fromJson(
+				responseError, 
+				InfoBipFailureResponse::class.java
+				)
+				SheSafeResult.Failure(error.toEntity())
+			}
+		} catch (ex: Exception) {
+			Log.e("InfoBipRepository", "sendSms: ", ex)
+			SheSafeResult.Error(ex)
+		}
+	}
+}
+\end{lstlisting}
+Esta abordagem permite que a camada de apresentação trate cada cenário de forma apropriada:
+\begin{lstlisting}[language=Kotlin, caption={Tratamento de Resultado no ViewModel}, label={lst:result_handling}]
+fun sendEmergencySms(message: String, contacts: List<String>) {
+viewModelScope.launch {
+	_sendingStatus.value = SendingStatus.Loading
+	val body = InfoBipBody(
+	messages = listOf(
+	InfoBipBody.Message(
+	content = InfoBipBody.Message.Content(message),
+	destinations = contacts.map { 
+		InfoBipBody.Message.Destination(it) 
+	},
+	sender = "SheSafe"
+	)
+	)
+	)
+	
+	when (val result = infoBipUseCase.sendSms(
+	body, 
+	"App $API_KEY"
+	).first()) {
+		is SheSafeResult.Success -> {
+			_sendingStatus.value = SendingStatus.Success(
+			result.data
+			)
+		}
+		is SheSafeResult.Failure -> {
+			_sendingStatus.value = SendingStatus.Failed(
+			result.data.description
+			)
+		}
+		is SheSafeResult.Error -> {
+			_sendingStatus.value = SendingStatus.Failed(
+			result.throwable?.message ?: "Erro desconhecido"
+			)
+		}
+	}
+	}
+}
+\end{lstlisting}
+\section{Considerações sobre Qualidade de Código}
+O projeto utiliza Detekt \cite{detekt2024} para análise estática de código Kotlin, garantindo aderência a padrões de qualidade e boas práticas. A configuração está definida no arquivo \texttt{build.gradle.kts} raiz:
+\begin{lstlisting}[language=Kotlin, caption={Configuração Detekt}, label={lst:detekt_config}]
+plugins {
+alias(libs.plugins.androidApplication).apply(false)
+alias(libs.plugins.androidLibrary).apply(false)
+alias(libs.plugins.kotlinAndroid).apply(false)
+alias(libs.plugins.kotlinMultiplatform).apply(false)
+alias(libs.plugins.compose.compiler).apply(false)
+alias(libs.plugins.google.services).apply(false)
+alias(libs.plugins.jetbrainsCompose) apply false
+alias(libs.plugins.firebase.crashlytics) apply false
+alias(libs.plugins.detekt)
+}
+detekt {
+toolVersion = libs.versions.detekt.get()
+config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+buildUponDefaultConfig = true
+allRules = false
+ignoreFailures = false
+}
+tasks.withType<Detekt>().configureEach {
+reports {
+	xml.required.set(true)
+	html.required.set(true)
+	txt.required.set(false)
+}
+}
+\end{lstlisting}
+As regras do Detekt incluem verificações para:
+\begin{itemize}
+\item Complexidade ciclomática de métodos
+\item Tamanho de classes e funções
+\item Nomenclatura de variáveis e funções
+\item Formatação e estilo de código
+\item Potenciais bugs e code smells
+\item Documentação obrigatória para APIs públicas
+\end{itemize}
+\section{Testes}
+O projeto está estruturado para suportar diferentes tipos de testes, seguindo a pirâmide de testes. A configuração de dependências de teste no módulo \texttt{androidApp} inclui:
+\begin{lstlisting}[language=Kotlin, caption={Dependências de Teste}, label={lst:test_deps}]
+dependencies {
+// Testes Unitários
+testImplementation(libs.junit)
+testImplementation(libs.mockk)
+testImplementation(libs.kotlinx.coroutines.test)
+testImplementation(libs.turbine)
+// Testes de Instrumentação
+androidTestImplementation(libs.androidx.runner)
+androidTestImplementation(libs.androidx.rules)
+androidTestImplementation(libs.androidx.test.junit)
+androidTestImplementation(libs.androidx.espresso.core)
+
+// Testes de UI com Compose
+androidTestImplementation(libs.androidx.ui.test.junit4)
+debugImplementation(libs.androidx.ui.test.manifest)
+}
+\end{lstlisting}
+Um exemplo de teste unitário para um caso de uso:
+\begin{lstlisting}[language=Kotlin, caption={Teste Unitário de Caso de Uso}, label={lst:unit_test}]
+class SecureContactUseCaseImplTest {
+	private lateinit var repository: SecureContactRepository
+	private lateinit var useCase: SecureContactUseCaseImpl
+	
+	@Before
+	fun setup() {
+		repository = mockk()
+		useCase = SecureContactUseCaseImpl(repository)
+	}
+	
+	@Test
+	fun `getSecureContacts should return list of contacts`() = 
+	runTest {
+		// Given
+		val expectedContacts = listOf(
+		SecureContact("João", "+5511999999999"),
+		SecureContact("Maria", "+5511888888888")
+		)
+		coEvery { 
+			repository.getSecureContactList() 
+		} returns expectedContacts
+		
+		// When
+		val result = useCase.getSecureContacts().first()
+		
+		// Then
+		assertEquals(expectedContacts, result)
+		coVerify { repository.getSecureContactList() }
+	}
+	
+	@Test
+	fun `registerSecureContact should return true on success`() = 
+	runTest {
+		// Given
+		val contact = SecureContact("João", "+5511999999999")
+		coEvery { 
+			repository.registerSecureContact(contact) 
+		} returns true
+		
+		// When
+		val result = useCase.registerSecureContact(contact).first()
+		
+		// Then
+		assertTrue(result)
+		coVerify { repository.registerSecureContact(contact) }
+	}
+}
+\end{lstlisting}
+
+\section{Padrões de Projeto Aplicados}
+Além da arquitetura limpa e MVVM, o projeto implementa diversos padrões de projeto:
+\subsection{Repository Pattern}
+O padrão Repository abstrai a lógica de acesso a dados, permitindo que a camada de domínio trabalhe com uma interface consistente, independentemente da fonte de dados real.
+\subsection{Dependency Injection}
+Através do Koin, o projeto implementa injeção de dependências, promovendo inversão de controle e facilitando testes unitários.
+\subsection{Observer Pattern}
+Utilizando \texttt{StateFlow} e \texttt{Flow} do Kotlin Coroutines, o projeto implementa o padrão Observer de forma reativa, permitindo que a UI observe mudanças de estado automaticamente.
+\subsection{Factory Pattern}
+Os métodos \texttt{fromEntity} e \texttt{toEntity} nos modelos de dados implementam o padrão Factory para criação e conversão de objetos.
+\subsection{Singleton Pattern}
+Objetos como \texttt{FirebaseProvider} e \texttt{SmsDevApi} são implementados como singletons para garantir uma única instância durante o ciclo de vida da aplicação.
+\section{Segurança}
+O projeto implementa práticas de segurança importantes:
+\begin{itemize}
+	\item \textbf{Autenticação Firebase}: Utiliza Firebase Authentication para gerenciar sessões de usuário de forma segura
+	\item \textbf{Dados do usuário isolados}: Cada usuário tem acesso apenas aos seus próprios dados no Firestore através de regras de segurança
+	\item \textbf{Comunicação HTTPS}: Todas as requisições de rede utilizam HTTPS
+	\item \textbf{Validação de permissões}: Verifica permissões antes de acessar recursos sensíveis do dispositivo
+	\item \textbf{Ofuscação de código}: Em builds de release, utiliza ProGuard/R8 para ofuscar o código
+\end{itemize}
+Exemplo de regras de segurança do Firestore:
+\begin{lstlisting}[caption={Regras de Segurança Firestore}, label={lst:firestore_rules}]
+	rules_version = '2';
+	service cloud.firestore {
+		match /databases/{database}/documents {
+			match /secureContacts/{email}/contacts/{contactId} {
+				allow read, write: if request.auth != null
+				&& request.auth.token.email == email;
+			}
+			match /helpRequests/{email}/helps/{helpId} {
+				allow read, write: if request.auth != null 
+				&& request.auth.token.email == email;
+			}
+			
+			match /personalData/{email} {
+				allow read, write: if request.auth != null 
+				&& request.auth.token.email == email;
+			}
+		}
+	}
+\end{lstlisting}
+\section{Análise de Dependências}
+O projeto utiliza um sistema de gerenciamento de dependências centralizado através do arquivo \texttt{libs.versions.toml}, facilitando atualizações e garantindo consistência de versões:
+\begin{lstlisting}[language=TOML, caption={Catálogo de Versões}, label={lst:version_catalog}]
+[versions]
+kotlin = "2.1.20"
+compose = "1.5.1"
+lifecycle = "2.6.2"
+koin = "3.5.0"
+retrofit = "2.9.0"
+detekt = "1.23.0"
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib",
+version.ref = "kotlin" }
+compose-ui = { module = "androidx.compose.ui:ui",
+version.ref = "compose" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+lifecycle-viewmodel = { module =
+"androidx.lifecycle:lifecycle-viewmodel-ktx",
+version.ref = "lifecycle" }
+koin-core = { module = "io.insert-koin:koin-core",
+version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android",
+version.ref = "koin" }
+retrofit = { module = "com.squareup.retrofit2:retrofit",
+version.ref = "retrofit" }
+retrofit-gson = { module =
+"com.squareup.retrofit2:converter-gson",
+version.ref = "retrofit" }
+[plugins]
+androidApplication = { id = "com.android.application",
+version = "8.2.1" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android",
+version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt",
+version.ref = "detekt" }
+\end{lstlisting}
+\section{Desempenho e Otimizações}
+O projeto implementa diversas otimizações de desempenho:
+\begin{itemize}
+\item \textbf{LazyColumn}: Para listas longas, utiliza \texttt{LazyColumn} que renderiza apenas itens visíveis
+\item \textbf{Coroutines}: Operações assíncronas não bloqueiam a UI
+\item \textbf{Cache de imagens}: Utiliza Coil para carregamento e cache eficiente de imagens
+\item \textbf{StateFlow}: Evita recomposições desnecessárias através de estado reativo
+\item \textbf{remember e derivedStateOf}: Minimiza recálculos em Composables
+\end{itemize}
+Exemplo de otimização com \texttt{derivedStateOf}:
+\begin{lstlisting}[language=Kotlin, caption={Otimização com derivedStateOf}, label={lst:derived_state}]
+@Composable
+fun SecureContactsScreen(viewModel: SecureContactViewModel) {
+val contacts by viewModel.secureContacts.collectAsState()
+val searchQuery by viewModel.searchQuery.collectAsState()
+// Filtragem computada apenas quando necessário
+val filteredContacts by remember {
+	derivedStateOf {
+		if (searchQuery.isEmpty()) {
+			contacts
+		} else {
+			contacts.filter { contact ->
+				contact.name.contains(searchQuery, 
+				ignoreCase = true) ||
+				contact.phoneNumber.contains(searchQuery)
+			}
+		}
+	}
+}
+
+LazyColumn {
+	items(filteredContacts) { contact ->
+		SecureContactItem(contact = contact)
+	}
+}
+}
+\end{lstlisting}
+
+
+
+
+
+\section{Avaliação com usuário}
+A avaliação com usuário constitui-se como um paradigma metodológico fundamental no campo da Interação Humano-Computador (IHC), caracterizado pela participação direta de usuários reais no processo de análise e validação de sistemas interativos \cite{dix2003human}. Esta abordagem fundamenta-se no princípio de que a qualidade de um sistema deve ser mensurada a partir da perspectiva de quem efetivamente o utiliza, considerando suas necessidades, expectativas, limitações cognitivas e contextos de uso específicos \cite{preece2015interaction}.
+
+Diferentemente dos métodos de inspeção realizados por especialistas, a avaliação com usuário oferece insights diretos sobre a experiência real de interação, revelando aspectos que podem não ser identificados através de análises teóricas ou heurísticas \cite{nielsen1994usability}. Esta metodologia permite a observação de comportamentos autênticos, identificação de estratégias de uso não previstas pelos designers, e compreensão das dificuldades reais enfrentadas pelos usuários em contextos naturais de utilização.
+\subsection{Avaliação do usuário SheSafe}
+
+As avaliações com usuário da aplicação SheSafe foram conduzidas ao longo do mês de setembro e outubro de 2025, envolvendo cinco participantes que executaram três tarefas específicas relacionadas às funcionalidades principais do sistema. Os testes foram realizados com a versão debug da aplicação Android, disponibilizada através de um link de download compartilhado com as avaliadoras.
+
+Em relação ao cumprimento dos objetivos das tarefas, todas as participantes conseguiram completar as atividades propostas: enviar um pedido de socorro pela primeira vez, cadastrar um novo contato seguro e alterar a mensagem padrão do pedido de ajuda. Não foram registrados erros durante a execução de nenhuma das tarefas, indicando que a interface apresenta boa intuitividade e que os fluxos de interação estão adequadamente projetados para facilitar a conclusão das ações pelos usuários.
+
+Na \autoref{tab:mediadetempo} é possível ver a média de tempo dos testes com os usuários para cada uma das três jornadas analisadas. Ela nos mostra uma performance satisfatória em todas as tarefas avaliadas. Para o envio do primeiro pedido de socorro, os tempos variaram entre 21 e 31 segundos, com média de 26,4 segundos. O cadastro de contatos seguros apresentou tempos mais consistentes, variando entre 13 e 18 segundos, com média de 15,6 segundos. A alteração da mensagem padrão apresentou tempos entre 11 e 25 segundos, com média de 17,2 segundos. Esta progressão temporal sugere que as funcionalidades mais críticas mantêm tempos de resposta adequados para situações de emergência, enquanto as funcionalidades de configuração apresentam variabilidade maior no tempo de execução.
+
+\begin{table}[htbp]
+	\centering
+	\caption[Média de tempo de execução]{Média de tempo de execução}
+	\label{tab:mediadetempo}
+	\begin{tabular}{cc}
+		\hline
+		\multicolumn{1}{|c|}{Tarefa}                                        & \multicolumn{1}{c|}{Tempo médio}            \\ \hline \hline
+		\multicolumn{1}{|c|}{Enviar um pedido de socorro pela primeira vez} & \multicolumn{1}{c|}{26,4s} \\ \hline
+		\multicolumn{1}{|c|}{Cadastrar um novo contato seguro}              & \multicolumn{1}{c|}{15,6s} \\ \hline
+		\multicolumn{1}{|c|}{Alterar a mensagem padrão do pedido de ajuda}  & \multicolumn{1}{c|}{17,2s} \\ \hline
+	\end{tabular}
+	\fonte{Próprio Autor}
+\end{table}
+
+
+No que se refere às impressões qualitativas, as avaliadoras expressaram percepções predominantemente positivas sobre diferentes aspectos da aplicação. A navegação foi consistentemente avaliada como adequada por todas as participantes, assim como o design visual e a usabilidade geral do sistema.
+\begin{comment}
+	Mônica Abreu destacou especificamente que "a interface é muito fácil e simples de aprender a utilizar", enquanto Wannielly Barbosa elogiou a "navegação fluida e sem problema para mudar de tela", caracterizando ainda a iniciativa como "ótima para mulheres".
+\end{comment}
+
+Contudo, surgiu um padrão consistente de feedback relacionado à ausência de confirmações explícitas do sistema após a execução de determinadas ações. Algumas das avaliadoras relataram especificamente a "falta de um retorno ao cadastrar o contato", enquanto uma outra observou que "ao alterar mensagem, só vi que alterou quando mudou na tela". Este feedback indica uma oportunidade de melhoria significativa no design de interação, particularmente na implementação de feedback imediato e explícito para ações críticas do usuário.
+
+A convergência deste feedback específico sobre a ausência de confirmações do sistema sugere que esta deficiência pode impactar negativamente a confiança do usuário na aplicação, especialmente em um contexto de uso onde a certeza sobre a execução correta das ações é fundamental para a eficácia do sistema de segurança. A implementação de mensagens de confirmação, notificações toast, ou outros elementos de feedback visual imediato deveria ser considerada como prioridade para futuras iterações do desenvolvimento, visando aumentar a transparência do sistema e a confiança do usuário nas operações realizadas.
