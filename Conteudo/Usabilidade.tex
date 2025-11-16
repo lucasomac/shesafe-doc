@@ -51,7 +51,7 @@ Metodologias contemporâneas de avaliação combinam princípios heurísticos tr
 \end{comment}
 Foram realizadas três avaliações principais utilizando o protótipo inicial do aplicativo SheSafe: a avaliação de rapída e rasteira, encontrada no anexo B, que visa fazer uma tomada rápida de opinião e oferecer aos interessados indicações gerais sobre a qualidade da experiência do usuário; a avaliação heurística de usabilidade, encontrada no anexo A, que tem o objetivo de verificar as heurísticas de acordo com o comportamento do usuário, e o teste de acessibilidade, encontrado no anexo C, que visa detectar barreiras de uso do aplicativo.
 
-A seguir é possível ver as telas que fizeram parte do wireframe do projeto inicial da interface. Nas telas foram inseridos elementos que atendem aos princípios de usabilidade e os reforçam.
+A seguir é possível ver as telas que fizeram parte do \textit{wireframe} do projeto inicial da interface. Nas telas foram inseridos elementos que atendem aos princípios de usabilidade e os reforçam.
 \subsection{Tela 1 - Home}
 \begin{figure}[H]
   \begin{center}
@@ -65,19 +65,19 @@ A seguir é possível ver as telas que fizeram parte do wireframe do projeto ini
 	\begin{alineas}
 		\item Tipo de interface e interação
 		
-		Na tela home será utilizada o tipo de tela de interface gráfica onde o usuário irá visualizar sua localização atual no mapa e um campo de busca e um botão de pedido de socorro. A forma de interação será através de toque nos botões tanto da bottom bar quanto do pedir socorro. E através de formulário no campo para inserir o nome do local a ser buscado.
+		Na tela home será utilizada o tipo de tela de interface gráfica onde o usuário irá visualizar sua localização atual no mapa e um campo de busca e um botão de pedido de socorro. A forma de interação será através de toque nos botões tanto da \textit{bottom bar} quanto do pedir socorro. E através de formulário no campo para inserir o nome do local a ser buscado.
 		\item Metáforas
 		
-		A BottomBar contém ícones os quais remetem as funcionalidades do aplicativo. O ícone com dois bonecos remete a uma lista de contatos. O ícone da casa remete a tela principal de qualquer aplicativo. Já o ícone circular com boneco dentro remete ao perfil em qualquer aplicação. A própria BottomBar já remete a ideia de que é possível navegar entre essas três telas sem que tenha que sair deste menu em si. 
+		A \textit{BottomBar} contém ícones os quais remetem as funcionalidades do aplicativo. O ícone com dois bonecos remete a uma lista de contatos. O ícone da casa remete a tela principal de qualquer aplicativo. Já o ícone circular com boneco dentro remete ao perfil em qualquer aplicação. A própria \textit{BottomBar} já remete a ideia de que é possível navegar entre essas três telas sem que tenha que sair deste menu em si. 
 		\item Aprendizibilidade
 		
-		Previsibilidade – Ao clicar em qualquer um dos ícones da bottom bar o usuário será navegado para a tela correspondente ao ícone.
+		Previsibilidade – Ao clicar em qualquer um dos ícones da \textit{bottom bar} o usuário será navegado para a tela correspondente ao ícone.
 		
-		Capacidade de sintetização – O usuário receberá um alert em formato de notificação Toast ao clicar em enviar pedido de socorro e confirmar (caso a confirmação de envio esteja ativada) que deseja enviar.
+		Capacidade de sintetização – O usuário receberá um alert em formato de notificação \textit{Toast} ao clicar em enviar pedido de socorro e confirmar (caso a confirmação de envio esteja ativada) que deseja enviar.
 		
 		Familiaridade – Não se aplica.
 		
-		Consistência – A bottom bar será apresentada sempre no fim das três telas principais (contatos, home e perfil). E os seus ícones estarão sempre na mesma ordem de posição.
+		Consistência – A \textit{bottom bar} será apresentada sempre no fim das três telas principais (contatos, home e perfil). E os seus ícones estarão sempre na mesma ordem de posição.
 		
 		Generalização – Não se aplica.
 		\item Flexibilidade
@@ -95,20 +95,21 @@ A seguir é possível ver as telas que fizeram parte do wireframe do projeto ini
 		
 		Observabilidade – O mapa indicará a localização atual do usuário na tela home.
 		
-		Recuperabilidade – O sistema irá emitir um alert em formato de Toast indicando quando houver falha no envio de um pedido de socorro e pedirá para que o usuário refaça a solicitação.
+		Recuperabilidade – O sistema irá emitir um alert em formato de \textit{Toast} indicando quando houver falha no envio de um pedido de socorro e pedirá para que o usuário refaça a solicitação.
 		
-		Capacidade de resposta – Ao enviar ou confirmar um pedido de socorro o sistema irá emitir um alerta em formato de Toast indicando que o pedido foi enviado.
+		Capacidade de resposta – Ao enviar ou confirmar um pedido de socorro o sistema irá emitir um alerta em formato de \textit{Toast} indicando que o pedido foi enviado.
 		
 		Conformidade de realização de atividades – O usuário irá receber na tela um aviso em caso de perda de conexão e pedirá que o usuário se reconecte antes de continuar as operações. 
 	\end{alineas}
 \end{comment}
-Na tela home será utilizada a interface gráfica que permite ao usuário visualizar um mapa com sua localização atual. Haverá um campo de busca e um botão para acionamento do pedido de socorro. Toda a interação será realizada por meio de toque nos botões da bottom bar, no botão de pedido de socorro e no formulário de busca.
+
+Na tela home será utilizada a interface gráfica que permite ao usuário visualizar um mapa com sua localização atual. Haverá um campo de busca e um botão para acionamento do pedido de socorro. Toda a interação será realizada por meio de toque nos botões da \textit{bottom bar}, no botão de pedido de socorro e no formulário de busca.
 
 A \textit{bottom bar} conterá três ícones que represetam as funcionalidade principais do aplicativo. O ícone com dois bonecos remete a lista de contatos. O ícone da casa remete a tela principal nos aplicativos que utilizam tal ícone. Já o ícone circular com boneco remete ao perfil nos aplicativos em que existe essa opção. A própria \textit{bottom bar} já consiste na ideia de uma interface navegável entre as três funcionalidade principais do aplicativo. Cada ícone ao ser clicado, deverá navegar para tela correspondente ao ícone.
 
 A \textit{bottom bar} estará posicionada sempre no fim da tela das três telas principais(contatos, home e perfil), contendo sempre os mesmos ícones e o mesmo posicionamento mantendo assim, a sua consistência
 
-Será enviado um alerta em formato de notificação Toast após o acionamento do botão de pedido de socorro e sua confirmação(caso esteja ativada a confirmação de envio). Uma notificação Toast também será enviada caso o envio do pedido de socorro resultar em uma falha. 
+Será enviado um alerta em formato de notificação \textit{Toast} após o acionamento do botão de pedido de socorro e sua confirmação(caso esteja ativada a confirmação de envio). Uma notificação \textit{Toast} também será enviada caso o envio do pedido de socorro resultar em uma falha. 
 
 Será possível cancelar o pedido de socorro ao clicar em cancelar(caso a confirmação de envio esteja ativada) no \textit{dialog} de confirmação que será apresentado. 
 
