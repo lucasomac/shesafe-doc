@@ -73,7 +73,7 @@ O subpacote \texttt{model} define modelos específicos da camada de apresentaç�
 
 \section{Tecnologias e \textit{Frameworks}}
 \subsection{Jetpack Compose e Compose Multiplatform}
-A interface de usuário da aplicação SheSafe foi desenvolvida utilizando Jetpack Compose, o \textit{toolkit} moderno de UI declarativa do Android, e preparada para expansão multiplataforma por meio do uso do Compose Multiplatform \cite{google2024compose}. Esta escolha tecnológica representa uma mudança paradigmática em relação ao desenvolvimento tradicional baseado em XML, oferecendo vantagens significativas em termos de produtividade, testabilidade e manutenibilidade.
+A interface de usuário da aplicação SheSafe foi desenvolvida utilizando Jetpack Compose, o \textit{toolkit} moderno de UI declarativa do Android, e preparada para expansão multiplataforma por meio do uso do \textit{Compose Multiplatform} \cite{google2024compose}. Esta escolha tecnológica representa uma mudança paradigmática em relação ao desenvolvimento tradicional baseado em XML, oferecendo vantagens significativas em termos de produtividade, testabilidade e manutenibilidade.
 
 O Jetpack Compose fundamenta-se no paradigma declarativo de construção de interfaces, onde o desenvolvedor descreve o estado desejado da UI por meio de funções \textit{composable}, e o \textit{framework} gerencia automaticamente a renderização e atualizações necessárias. Esta abordagem elimina a necessidade de manipulação imperativa de views e simplifica substancialmente o gerenciamento de estado da interface.
 
@@ -86,7 +86,7 @@ A estrutura do projeto demonstra preparação para desenvolvimento multiplatafor
 	\label{fig:settings_gradle}
 	\legend{Fonte: Próprio Autor}
 \end{figure}
-A adoção do Compose Multiplatform posiciona a aplicação para futura expansão para iOS e web, permitindo compartilhamento substancial de código de lógica de negócio e interface de usuário entre plataformas. Esta estratégia alinha-se com o objetivo de maximizar o alcance da ferramenta de proteção, disponibilizando-a para usuários independentemente da plataforma móvel utilizada.
+A adoção do \textit{Compose Multiplatform} posiciona a aplicação para futura expansão para iOS e web, permitindo compartilhamento substancial de código de lógica de negócio e interface de usuário entre plataformas. Esta estratégia alinha-se com o objetivo de maximizar o alcance da ferramenta de proteção, disponibilizando-a para usuários independentemente da plataforma móvel utilizada.
 
 \subsection{Firebase como Backend-as-a-Service}
 A aplicação utiliza o Firebase como solução de \textit{backend-as-a-service}, aproveitando múltiplos serviços da plataforma para diferentes funcionalidades. O Firebase Firestore atua como banco de dados NoSQL em tempo real, armazenando contatos seguros, pedidos de ajuda e configurações do usuário. O Firebase Authentication gerencia autenticação de usuários utilizando o Google Sign-In. O Firebase Crashlytics monitora erros e crashes da aplicação em produção.
@@ -145,7 +145,7 @@ Ao confirmar envio, aplicação coleta localização atual do usuário por meio 
 
 O \texttt{HomeViewModel} orquestra este processo complexo, coordenando solicitação de permissões de localização e SMS (gerenciadas por meio do Accompanist Permissions), coleta de localização atual, formatação de mensagens, e invocação de casos de uso para persistência de dados e envio de mensagens.
 
-Foram utilizadas duas apis para o envio do SMS: InfoBip\footnote{https://www.infobip.com/} api utilizada como opção principal para envio de SMS de emergência. A implementação está em \texttt{InfoBipRepositoryImpl}. E a API SMS Dev\footnote{https://www.smsdev.com.br/}, foi utilizada como um possível \textit{fallback}.
+Foram utilizadas duas apis para o envio do SMS: \textit{InfoBip}\footnote{https://www.infobip.com/} api utilizada como opção principal para envio de SMS de emergência. A implementação está em \texttt{InfoBipRepositoryImpl}. E a API \textit{SMS Dev}\footnote{https://www.smsdev.com.br/}, foi utilizada como um possível \textit{fallback}.
 
 \begin{comment}
 \begin{lstlisting}[caption={Integração com APIs de SMS},label={lst:sms-api}]
